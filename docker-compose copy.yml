@@ -1,0 +1,59 @@
+version: '3.7'
+
+services:
+  api_nest:
+    stdin_open: true
+    container_name: api_nest
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    ports:
+      - 9330:9330
+      - 13000:3000
+    environment:
+      - REDIS=api_redis_nest
+      - NODE_ENV=develop
+      - PG_HOST=api_database_nest
+      - PG_DATABASE=api-basic-app
+      - PG_PORT=5432
+      - PG_USERNAME=postgres
+      - PG_PASSWORD=admin
+      - SECRET_JWT=139b812008b3ab0443d30b92d4f9527854d02141
+    depends_on:
+      - api_redis_nest
+      - api_database_nest
+  api_redis_nest:
+    container_name: api_redis_nest
+    image: redis:alpine3.16
+    ports:
+      - 16380:6379
+  api_database_nest:
+    image: postgres:alpine3.16
+    container_name: api_database_nest
+    environment:
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - ${HOME}/docker/postgresql/api_database_nest:/var/lib/postgresql:z
+      - ./docker-bootstrap/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+    ports:
+      - "35433:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  api_mailer_nest:
+    image: maildev/maildev
+    container_name: api_mailer_nest
+    environment:
+      - MAILDEV_MAIL_DIRECTORY=/home/maildev/data
+    volumes:
+      - ${HOME}/docker/maildev/api_mailer_nest:/home/maildev/data
+    ports:
+      - "21080:1080"
+      - "21025:1025"
+volumes:
+  node_modules:
