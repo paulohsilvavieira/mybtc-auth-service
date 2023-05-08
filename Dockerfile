@@ -1,23 +1,38 @@
-# Define a imagem base que será usada
-FROM node:18.16-alpine AS base
+FROM node:18.16-alpine as build
 
-# Define o diretório de trabalho dentro do container
+# Create a working directory inside the container
 WORKDIR /app
 
-# Copia os arquivos necessários para dentro do container
+# Copy the package.json and package-lock.json files to the working directory
 COPY package*.json ./
 
-# Instala as dependências do projeto
-RUN npm install --only=production
+# Install dependencies
+RUN npm install
 
-# Copia os arquivos de produção para dentro do container
-COPY --from=base /app/node_modules ./node_modules
+# Copy the rest of the application files to the working directory
+COPY . .
 
-# Copia todos os arquivos de produção do diretório atual para dentro do container
-COPY --from=base /app/dist ./dist
+# Build the application
+RUN npm run build
 
-# Define a porta em que a aplicação irá rodar
+# Production stage
+FROM node:18.16-alpine
+
+# Create a working directory inside the container
+WORKDIR /app
+
+# Copy the package.json and package-lock.json files to the working directory
+COPY package*.json ./
+
+# Install only production dependencies
+RUN npm install --production
+
+# Copy the application from the build stage
+COPY --from=build /app/dist .
+
+# Expose the port on which the application will run
 EXPOSE 3000
 
-# Inicia a aplicação
+ENV REDIS NODE_ENV PG_HOST PG_DATABASE PG_PORT PG_USERNAME PG_PASSWORD SECRET_JWT
+# Start the application
 CMD ["node", "dist/main"]

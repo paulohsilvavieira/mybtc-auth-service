@@ -1,0 +1,26 @@
+piVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-my-bitcoin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-my-bitcoin
+  template:
+    metadata:
+      labels:
+        app: api-my-bitcoin
+    spec:
+      containers:
+        - name: api-my-bitcoin
+          image: node:14
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: api-my-bitcoin-volume
+              mountPath: /app
+      volumes:
+        - name: api-my-bitcoin-volume
+          hostPath:
+            path: /path/to/your/app
