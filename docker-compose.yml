@@ -12,12 +12,12 @@ services:
       - node_modules:/usr/src/app/node_modules
     ports:
       - 9330:9330
-      - 13000:3000
+      - 3000:3000
     environment:
       - REDIS=api_redis_my_bitcoin
       - NODE_ENV=develop
       - PG_HOST=api_database_my_bitcoin
-      - PG_DATABASE=api-basic-app
+      - PG_DATABASE=api-my-btc-dev
       - PG_PORT=5432
       - PG_USERNAME=postgres
       - PG_PASSWORD=admin
@@ -34,10 +34,13 @@ services:
     image: postgres:alpine3.16
     container_name: api_database_my_bitcoin
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
+      POSTGRES_DB: api-my-btc-dev
+      
     volumes:
       - ${HOME}/docker/postgresql/api_database_my_bitcoin:/var/lib/postgresql:z
-      - ./docker-bootstrap/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+      # - ./docker-bootstrap/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
     ports:
       - "35433:5432"
     healthcheck:
@@ -55,5 +58,13 @@ services:
     ports:
       - "21080:1080"
       - "21025:1025"
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@root.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
 volumes:
   node_modules:

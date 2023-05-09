@@ -35,4 +35,4 @@ EXPOSE 3000
 
 ENV REDIS NODE_ENV PG_HOST PG_DATABASE PG_PORT PG_USERNAME PG_PASSWORD SECRET_JWT
 # Start the application
-CMD ["node", "dist/main"]
+CMD ["node", "main"]
