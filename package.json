@@ -19,18 +19,26 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "npm test -- --config ./test/jest-e2e.json",
     "prepare": "husky install",
-    "test:staged": "npm test -- --findRelatedTests"
+    "test:staged": "npm test -- --findRelatedTests",
+    "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
+    "migration:create": "npm run typeorm:cli -- migration:create ./src/infra/database/migrations/$npm_config_name",
+    "migration:run": "npm run typeorm:cli -- migration:run -d ./typeorm-config.ts",
+    "migration:revert": "npm run typeorm:cli -- migration:revert -d ./typeorm-config.ts",
+    "entity:create": "npm run typeorm:cli -- entity:create src/infra/database/entities/$npm_config_name && node update-entities-cli.js $npm_config_name"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.3.2",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/typeorm": "^9.0.1",
     "aws-lambda": "^1.0.7",
     "aws-serverless-express": "^3.4.0",
+    "pg": "^8.11.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "serverless": "^3.30.1"
+    "serverless": "^3.30.1",
+    "typeorm": "^0.3.16"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
