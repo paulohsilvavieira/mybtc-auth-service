@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-console.log(__dirname + '/database/entities/index.{.ts,.js}');
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -18,7 +17,7 @@ console.log(__dirname + '/database/entities/index.{.ts,.js}');
           database: configService.get('PG_DATABASE'),
           host: configService.get('PG_HOST'),
           port: configService.get('PG_PORT'),
-          entities: [__dirname + '/database/entities/index.{.ts,.js}'],
+          entities: [__dirname + '/database/entities/index{.ts,.js}'],
           synchronize: false,
         };
       },

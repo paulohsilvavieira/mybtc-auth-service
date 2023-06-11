@@ -3,23 +3,13 @@ import { AuthController } from './auth.controller';
 import { SignIn } from './protocols/usecases';
 import { SignInUsecase } from './usecases';
 import { AuthenticationEntity } from '@entities/AuthenticationEntity';
-import { TypeOrmModule, getDataSourceToken } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { IVerifyAuthRepo } from './protocols/repository';
 import { AuthenticationRepository } from './repositories';
-import { DataSource, Repository } from 'typeorm';
 
 @Module({
   controllers: [AuthController],
   providers: [
-    {
-      provide: AuthenticationRepository,
-      useFactory: (dataSource: DataSource) => {
-        return new AuthenticationRepository(
-          dataSource.getRepository(AuthenticationEntity),
-        );
-      },
-      inject: [getDataSourceToken()],
-    },
     {
       provide: IVerifyAuthRepo,
       useClass: AuthenticationRepository,
@@ -29,11 +19,6 @@ import { DataSource, Repository } from 'typeorm';
       useClass: SignInUsecase,
     },
   ],
-  imports: [
-    TypeOrmModule.forFeature([
-      AuthenticationEntity,
-      Repository<AuthenticationEntity>,
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([AuthenticationEntity])],
 })
 export class AuthModule {}
