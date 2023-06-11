@@ -16,6 +16,12 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@auth/*": ["src/auth/*"],
+      "@repository/*": ["src/database/repositories/*"],
+      "@entities/*": ["src/database/entities/*"],
+      "@tests/*": ["test/*"]
+    }
   }
 }
