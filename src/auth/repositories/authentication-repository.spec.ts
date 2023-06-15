@@ -31,9 +31,12 @@ describe('AuthenticationRepository', () => {
 
   test('should return  isValid: false a invalid user', async () => {
     jest.spyOn(authRepositoryMock, 'findOneBy').mockResolvedValue(null);
-    const result = await sut.verifyAuth({ email: 'test', password: 'test2' });
+    const result = await sut.verifyAuthByEmail({
+      email: 'test',
+    });
     expect(result).toEqual({
-      isValid: false,
+      isValidEmail: false,
+      password: undefined,
     });
   });
   test('should return  isValid: true is a valid user', async () => {
@@ -41,9 +44,12 @@ describe('AuthenticationRepository', () => {
       .spyOn(authRepositoryMock, 'findOneBy')
       .mockResolvedValue({ id: 'teste', email: 'test', password: 'test2' });
 
-    const result = await sut.verifyAuth({ email: 'test', password: 'test2' });
+    const result = await sut.verifyAuthByEmail({
+      email: 'test',
+    });
     expect(result).toEqual({
-      isValid: true,
+      isValidEmail: true,
+      password: 'test2',
     });
   });
 });

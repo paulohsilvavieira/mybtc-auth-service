@@ -1,13 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
-import { SignIn } from './protocols/usecases';
+import { SignInProtocol } from './protocols/usecases';
 import { MockProxy, mock } from 'jest-mock-extended';
+import { UnauthorizedException } from '@nestjs/common';
 
 describe('AuthController', () => {
-  let controller: AuthController;
-  let signInUsecaseMock: MockProxy<SignIn>;
+  let authController: AuthController;
+  let signInUsecaseMock: MockProxy<SignInProtocol>;
   beforeAll(() => {
     signInUsecaseMock = mock();
+
     signInUsecaseMock.exec.mockResolvedValue({
       token: 'validToken',
     });
@@ -18,26 +20,35 @@ describe('AuthController', () => {
       controllers: [AuthController],
       providers: [
         {
-          provide: SignIn,
+          provide: SignInProtocol,
           useValue: signInUsecaseMock,
         },
       ],
     }).compile();
 
-    controller = module.get<AuthController>(AuthController);
+    authController = module.get<AuthController>(AuthController);
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(authController).toBeDefined();
   });
-  test('Test SignIn User ', async () => {
-    const result = await controller.signIn();
-    expect(result).toEqual({
-      token: 'validToken',
-    });
-    expect(signInUsecaseMock.exec).toHaveBeenCalledWith({
-      email: 'email@email.com',
-      password: '123456',
-    });
+  test('shoud return UnauthorizedException when send invalid credentials', async () => {
+    signInUsecaseMock.exec.mockResolvedValueOnce({ token: undefined });
+
+    const invalidUserCredentials = {
+      email: 'invalidEmail@email.com',
+      password: 'invalidPassword',
+    };
+    const result = await authController.login(invalidUserCredentials);
+    expect(result).toEqual(new UnauthorizedException());
+  });
+  test('shoud return validToken when send valid credentials', async () => {
+    signInUsecaseMock.exec.mockResolvedValueOnce({ token: 'validToken' });
+    const validUserCredentials = {
+      email: 'validEmail@email.com',
+      password: 'validPassword',
+    };
+    const result = await authController.login(validUserCredentials);
+    expect(result).toEqual('validToken');
   });
 });

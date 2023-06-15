@@ -1,24 +1,29 @@
-import { IVerifyAuthRepo } from '@auth/protocols/repository';
-import { SignInParams } from '@auth/protocols/usecases';
+import {
+  VerifyAuthRepoProtocol,
+  VerifyAuthRepoInput,
+  VerifyAuthRepoOutput,
+} from '@auth/protocols/repository';
 import { AuthenticationEntity } from '@entities/AuthenticationEntity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class AuthenticationRepository implements IVerifyAuthRepo {
+export class AuthenticationRepository implements VerifyAuthRepoProtocol {
   constructor(
     @InjectRepository(AuthenticationEntity)
     private readonly authTypeOrmRepository: Repository<AuthenticationEntity>,
   ) {}
 
-  async verifyAuth(params: SignInParams): Promise<{ isValid: boolean }> {
-    const existsUser = await this.authTypeOrmRepository.findOneBy({
+  async verifyAuthByEmail(
+    params: VerifyAuthRepoInput,
+  ): Promise<VerifyAuthRepoOutput> {
+    const user = await this.authTypeOrmRepository.findOneBy({
       email: params.email,
-      password: params.password,
     });
     return {
-      isValid: existsUser !== null,
+      isValidEmail: user !== null,
+      password: user !== null ? user.password : undefined,
     };
   }
 }
