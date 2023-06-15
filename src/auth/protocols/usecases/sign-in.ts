@@ -1,10 +1,10 @@
-export interface SignInParams {
+export interface SignInUsecaseInput {
   email: string;
   password: string;
 }
-export abstract class SignIn {
-  exec: (params: SignInParams) => Promise<{
-    token?: string;
-    msg?: string;
-  }>;
+export interface SignInUsecaseOutput {
+  token: string;
+}
+export abstract class SignInProtocol {
+  exec: (params: SignInUsecaseInput) => Promise<SignInUsecaseOutput>;
 }
