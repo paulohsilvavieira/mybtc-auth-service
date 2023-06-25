@@ -1,15 +1,23 @@
 import {
+  BadRequestException,
   Body,
   Controller,
-  Get,
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SignInProtocol, SignInUsecaseInput } from '@auth/protocols/usecases';
+import {
+  RegisterAuthProtocol,
+  RegisterAuthUsecaseInput,
+  SignInProtocol,
+  SignInUsecaseInput,
+} from '@auth/protocols/usecases';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly singInUsecase: SignInProtocol) {}
+  constructor(
+    private readonly singInUsecase: SignInProtocol,
+    private readonly registerAuthUsecase: RegisterAuthProtocol,
+  ) {}
   @Post('/login')
   async login(@Body() body: SignInUsecaseInput): Promise<any> {
     const { token } = await this.singInUsecase.exec(body);
@@ -17,5 +25,14 @@ export class AuthController {
       return new UnauthorizedException();
     }
     return token;
+  }
+
+  @Post('/register')
+  async register(@Body() body: RegisterAuthUsecaseInput): Promise<any> {
+    const { success } = await this.registerAuthUsecase.exec(body);
+    if (!success) {
+      return new BadRequestException();
+    }
+    return { msg: 'User Created!' };
   }
 }
