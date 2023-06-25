@@ -6,7 +6,7 @@ services:
     container_name: api_my_bitcoin
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile
+      dockerfile: dockerfiles/Dockerfile.dev
     volumes:
       - .:/usr/src/app
       - node_modules:/usr/src/app/node_modules
