@@ -16,10 +16,38 @@ export class CreateAuthenticationTable1686419096797
           {
             name: 'email',
             type: 'varchar',
+            isNullable: false,
+            isUnique: true,
           },
           {
             name: 'password',
             type: 'varchar',
+            isNullable: false,
+          },
+          {
+            name: 'last_access_at',
+            type: 'timestamp',
+            isNullable: true,
+          },
+          {
+            name: 'otp_active',
+            type: 'boolean',
+            default: false,
+          },
+          {
+            name: 'otp_secret',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
           },
         ],
       }),
