@@ -1,5 +1,5 @@
-import { VerifyHashProtocol } from '@auth/protocols/cryptography/bcrypt';
-import { VerifyAuthRepoProtocol } from '@auth/protocols/repository';
+import { BcryptProtocol, JwtProtocol } from '@auth/protocols/cryptography';
+import { AuthRepoProtocol } from '@auth/protocols/repository';
 import { Injectable } from '@nestjs/common';
 import {
   SignInProtocol,
@@ -10,8 +10,9 @@ import {
 @Injectable()
 export class SignInUsecase implements SignInProtocol {
   constructor(
-    private readonly authRepository: VerifyAuthRepoProtocol,
-    private readonly bcrypt: VerifyHashProtocol,
+    private readonly authRepository: AuthRepoProtocol,
+    private readonly bcrypt: BcryptProtocol,
+    private readonly jwt: JwtProtocol,
   ) {}
   async exec(params: SignInUsecaseInput): Promise<SignInUsecaseOutput> {
     const { isValidEmail, password } =
@@ -23,8 +24,11 @@ export class SignInUsecase implements SignInProtocol {
       params.password,
     );
     if (isValidEmail && isValidPassword) {
+      const { token } = await this.jwt.createToken({
+        email: params.email,
+      });
       return {
-        token: 'validToken',
+        token,
       };
     }
     return {
