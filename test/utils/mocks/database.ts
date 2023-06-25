@@ -1,4 +1,3 @@
-import path from 'node:path';
 import { IMemoryDb, newDb } from 'pg-mem';
 import { DataSource } from 'typeorm';
 
@@ -16,7 +15,8 @@ export const makeFakeDb = async (
     implementation: () => 'test',
     name: 'version',
   });
-  const databaseConnection = db.adapters.createTypeormDataSource({
+
+  const databaseConnection = db.adapters.createTypeormConnection({
     type: 'postgres',
     entities: entities ?? [__dirname + '../entities/index.{ts,js}'],
   });
