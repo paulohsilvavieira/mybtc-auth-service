@@ -7,9 +7,9 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 describe('AuthenticationRepository', () => {
   let sut: AuthenticationRepository;
   let authRepositoryMock: Repository<AuthenticationEntity>;
-
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
+      imports: [],
       providers: [
         AuthenticationRepository,
         {
@@ -40,9 +40,13 @@ describe('AuthenticationRepository', () => {
     });
   });
   test('should return  isValid: true is a valid user', async () => {
-    jest
-      .spyOn(authRepositoryMock, 'findOneBy')
-      .mockResolvedValue({ id: 'teste', email: 'test', password: 'test2' });
+    jest.spyOn(authRepositoryMock, 'findOneBy').mockResolvedValue({
+      id: 'teste',
+      email: 'test',
+      password: 'test2',
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
 
     const result = await sut.verifyAuthByEmail({
       email: 'test',
@@ -51,5 +55,25 @@ describe('AuthenticationRepository', () => {
       isValidEmail: true,
       password: 'test2',
     });
+  });
+
+  test('should return  success: true when register auth', async () => {
+    jest.spyOn(authRepositoryMock, 'create').mockReturnValue({
+      id: 'test',
+      email: 'test',
+      password: 'test',
+    } as never);
+
+    jest.spyOn(authRepositoryMock, 'insert').mockResolvedValue({
+      email: 'test',
+      password: 'test',
+    } as never);
+
+    const result = await sut.createAuth({
+      email: 'test',
+      password: 'test',
+    });
+
+    expect(result.success).toBeTruthy();
   });
 });
