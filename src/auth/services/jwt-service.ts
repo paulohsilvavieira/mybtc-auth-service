@@ -14,10 +14,10 @@ export class JsonWebTokenService implements JwtProtocol {
     token: string,
   ): Promise<{ isValid: boolean; payload: any }> {
     try {
-      const validated = await this.jwtService.verifyAsync(token);
+      const { payload } = await this.jwtService.verifyAsync(token);
       return {
         isValid: true,
-        payload: validated,
+        payload,
       };
     } catch (error) {
       return {

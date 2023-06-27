@@ -27,16 +27,42 @@ describe('JsonWebTokenService', () => {
 
   describe('createToken()', () => {
     it('should create a valid JWT token with the provided data', async () => {
-      const dados = { id: 1, nome: 'Usuário' };
-      const token = 'toke=n_jwt_valido';
+      const payload = { id: 1, name: 'user' };
+      const token = 'token_jwt_valido';
       jest.spyOn(jwtServiceMock, 'signAsync').mockResolvedValue(token);
 
-      const result = await jsonWebTokenService.createToken(dados);
+      const result = await jsonWebTokenService.createToken(payload);
       const expectedResult = {
         token,
       };
       expect(result).toEqual(expectedResult);
-      expect(jwtServiceMock.signAsync).toHaveBeenCalledWith(dados);
+      expect(jwtServiceMock.signAsync).toHaveBeenCalledWith(payload);
+    });
+  });
+  describe('verifyToken()', () => {
+    it('should return payload with valid token', async () => {
+      const payload = { id: 1, name: 'Usuário' };
+      const token = 'token';
+
+      jest.spyOn(jwtServiceMock, 'verifyAsync').mockResolvedValue({
+        payload,
+      });
+
+      const result = await jsonWebTokenService.verifyToken(token);
+
+      expect(result).toEqual({ isValid: true, payload });
+    });
+
+    it('should return throw when use invalid token', async () => {
+      const token = 'invalidToken';
+
+      jest.spyOn(jwtServiceMock, 'verifyAsync').mockImplementation(() => {
+        throw new Error('User not found');
+      });
+
+      const result = await jsonWebTokenService.verifyToken(token);
+
+      expect(result).toEqual({ isValid: false, payload: undefined });
     });
   });
 });
