@@ -39,7 +39,6 @@
     "pg": "^8.11.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "serverless": "^3.30.1",
     "typeorm": "^0.3.16"
   },
   "devDependencies": {
@@ -85,6 +84,11 @@
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "coverageThreshold": {
+      "global": {
+        "statements": 90
+      }
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s",
