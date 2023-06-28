@@ -8,7 +8,7 @@ import { AuthRepoProtocol } from './protocols/repository';
 import { AuthenticationRepository } from './repositories';
 import { BcryptProtocol, JwtProtocol } from './protocols/cryptography';
 import { BcryptService } from './services/bcrypt-service';
-import { RegisterAuthUsecase } from './usecases/register-auth-usecase';
+import { RegisterAuthUsecase } from './usecases/';
 import { JsonWebTokenService } from './services/jwt-service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -31,7 +31,6 @@ import { ConfigService } from '@nestjs/config';
   providers: [
     {
       provide: AuthRepoProtocol,
-
       useClass: AuthenticationRepository,
     },
     {
@@ -55,6 +54,7 @@ import { ConfigService } from '@nestjs/config';
   exports: [
     BcryptProtocol,
     SignInProtocol,
+    JwtProtocol,
     RegisterAuthProtocol,
     AuthRepoProtocol,
   ],

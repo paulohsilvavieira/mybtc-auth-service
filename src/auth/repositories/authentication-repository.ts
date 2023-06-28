@@ -21,6 +21,7 @@ export class AuthenticationRepository implements AuthRepoProtocol {
       email: params.email,
       password: params.password,
     });
+
     const saved = await this.authTypeOrmRepository.insert(entityToSave);
     return {
       success: saved !== undefined,

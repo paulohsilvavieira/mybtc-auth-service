@@ -51,6 +51,7 @@ describe('AuthenticationRepository', () => {
     const result = await sut.verifyAuthByEmail({
       email: 'test',
     });
+
     expect(result).toEqual({
       isValidEmail: true,
       password: 'test2',

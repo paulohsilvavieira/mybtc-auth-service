@@ -47,8 +47,8 @@ describe('AuthController', () => {
         email: 'invalidEmail@email.com',
         password: 'invalidPassword',
       };
-      const result = await authController.login(invalidUserCredentials);
-      expect(result).toEqual(new UnauthorizedException());
+      const result = authController.login(invalidUserCredentials);
+      await expect(result).rejects.toEqual(new UnauthorizedException());
     });
     test('shoud return validToken when send valid credentials', async () => {
       signInUsecaseMock.exec.mockResolvedValueOnce({ token: 'validToken' });
@@ -79,8 +79,10 @@ describe('AuthController', () => {
         email: 'validEmail@email.com',
         password: 'validPassword',
       };
-      const result = await authController.register(authDataToRegister);
-      expect(result).toEqual(new BadRequestException());
+      const result = authController.register(authDataToRegister);
+      await expect(result).rejects.toEqual(
+        new BadRequestException('Error on Create Authentication Info'),
+      );
     });
   });
 });

@@ -1,9 +1,11 @@
 import { JwtProtocol } from '@auth/protocols/cryptography';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class JsonWebTokenService implements JwtProtocol {
+  private readonly logger = new Logger(JsonWebTokenService.name);
+
   constructor(private jwtService: JwtService) {}
 
   async createToken(payload: any): Promise<{ token: string }> {
