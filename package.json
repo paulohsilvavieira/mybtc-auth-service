@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "docker":"docker-compose up -d api_my_bitcoin_dev --no-recreate && docker exec -it api_my_bitcoin_dev /bin/sh",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

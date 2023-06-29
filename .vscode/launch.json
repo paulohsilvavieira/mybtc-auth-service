@@ -9,7 +9,7 @@
       "request": "attach",
       "name": "Debug Docker",
       "remoteRoot": "/usr/src/app",
-      "port": 9230
+      "port": 9331
     },
     
   ]
