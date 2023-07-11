@@ -7,6 +7,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 describe('AuthenticationRepository', () => {
   let sut: AuthenticationRepository;
   let authRepositoryMock: Repository<AuthenticationEntity>;
+
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [],
@@ -44,6 +45,19 @@ describe('AuthenticationRepository', () => {
       id: 'teste',
       email: 'test',
       password: 'test2',
+      userInfo: {
+        id: 'test',
+        email: '',
+        firstName: '',
+        phoneNumber: '',
+        proofAddress: '',
+        proofDocumentFront: '',
+        proofDocumentBack: '',
+        status: '',
+        authenticationId: '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
       created_at: new Date(),
       updated_at: new Date(),
     });
