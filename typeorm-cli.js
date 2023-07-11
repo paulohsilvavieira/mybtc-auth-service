@@ -5,7 +5,7 @@ const nameFile = args.replace('--name=', '');
 const exportFileName = "export * from './" + nameFile + "';";
 
 appendFileSync(
-  './src/infra/database/entities/index.ts',
+  './src/database/entities/index.ts',
   exportFileName + '\n',
   'utf-8',
 );
