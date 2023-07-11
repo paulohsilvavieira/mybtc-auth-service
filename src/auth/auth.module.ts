@@ -12,10 +12,11 @@ import { RegisterAuthUsecase } from './usecases/';
 import { JsonWebTokenService } from './services/jwt-service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { UserEntity } from '@entities/UserEntity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AuthenticationEntity]),
+    TypeOrmModule.forFeature([AuthenticationEntity, UserEntity]),
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
