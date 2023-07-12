@@ -5,7 +5,7 @@ export interface CreateUserUsecaseInput {
 }
 export interface CreateUserUsecaseOutput {
   success: boolean;
-  error?: Error;
+  error?: string;
 }
 
 export abstract class CreateUserProtocol {

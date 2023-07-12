@@ -10,5 +10,5 @@ export type CreateUserRepoInput = {
 
 export type CreateUserRepoOutput = {
   success: boolean;
-  error?: Error;
+  error?: string;
 };

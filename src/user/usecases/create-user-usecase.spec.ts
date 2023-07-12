@@ -17,5 +17,34 @@ describe('CreateUserUseCase', () => {
   beforeEach(() => {
     sut = new CreateUserUseCase(userRepositoryMock);
   });
-  test('', () => {});
+
+  test('should return throw error on dont save user', async () => {
+    jest
+      .spyOn(userRepositoryMock, 'createUser')
+      .mockImplementationOnce(throwError);
+    const promise = sut.exec(mockCreateUserInput());
+
+    expect(promise).rejects.toThrow();
+  });
+
+  test('should return error when dont save user record on repository', async () => {
+    userRepositoryMock.createUser.mockResolvedValueOnce({
+      success: false,
+      error: 'Error on save user record',
+    });
+    const result = await sut.exec(mockCreateUserInput());
+
+    expect(result).toEqual({
+      success: false,
+      error: 'Error on save user record',
+    });
+  });
+
+  test('should return success if save sucessfull user on repo', async () => {
+    const result = await sut.exec(mockCreateUserInput());
+
+    expect(result).toEqual({
+      success: true,
+    });
+  });
 });
