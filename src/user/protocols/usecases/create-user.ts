@@ -2,6 +2,7 @@ export interface CreateUserUsecaseInput {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  authenticationId: string;
 }
 export interface CreateUserUsecaseOutput {
   success: boolean;
