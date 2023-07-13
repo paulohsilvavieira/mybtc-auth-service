@@ -6,6 +6,7 @@ export type CreateUserRepoInput = {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  authenticationId: string;
 };
 
 export type CreateUserRepoOutput = {
