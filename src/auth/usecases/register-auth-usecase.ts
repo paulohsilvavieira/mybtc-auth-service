@@ -50,7 +50,7 @@ export class RegisterAuthUsecase implements RegisterAuthProtocol {
         success,
       };
     } catch (error) {
-      this.logger.error(error.message);
+      this.logger.error({ message: error.message });
       return {
         success: false,
       };
