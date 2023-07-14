@@ -1,7 +1,7 @@
 import { MockProxy, mock } from 'jest-mock-extended';
 import { CreateUserUseCase } from './create-user-usecase';
 import { UserRepoProtocol } from '../protocols/repositories';
-import { mockCreateUserInput, throwError } from '@tests/utils/mocks';
+import { mockCreateUserInput, throwError } from '../../../test/utils/mocks';
 
 describe('CreateUserUseCase', () => {
   let userRepositoryMock: MockProxy<UserRepoProtocol>;

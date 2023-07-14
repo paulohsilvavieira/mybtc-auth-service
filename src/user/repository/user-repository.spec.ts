@@ -1,9 +1,9 @@
 import { Repository } from 'typeorm';
-import { UserEntity } from '@entities/UserEntity';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserRepository } from './user-repository';
-import { mockCreateUserInput } from '@tests/utils/mocks';
+import { UserEntity } from '../../database/entities';
+import { mockCreateUserInput } from '../../../test/utils/mocks';
 
 describe('AuthenticationRepository', () => {
   let sut: UserRepository;

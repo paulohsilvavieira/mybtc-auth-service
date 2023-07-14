@@ -1,8 +1,8 @@
 import { AuthenticationRepository } from './authentication-repository';
 import { Repository } from 'typeorm';
-import { AuthenticationEntity } from '@entities/AuthenticationEntity';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { AuthenticationEntity } from '../../database/entities';
 
 describe('AuthenticationRepository', () => {
   let sut: AuthenticationRepository;
@@ -45,19 +45,6 @@ describe('AuthenticationRepository', () => {
       id: 'teste',
       email: 'test',
       password: 'test2',
-      userInfo: {
-        id: 'test',
-        email: '',
-        firstName: '',
-        phoneNumber: '',
-        proofAddress: '',
-        proofDocumentFront: '',
-        proofDocumentBack: '',
-        status: '',
-        authenticationId: '',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
       created_at: new Date(),
       updated_at: new Date(),
     });

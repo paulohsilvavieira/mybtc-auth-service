@@ -1,8 +1,8 @@
 /* eslint-disable prefer-const */
 import { mock, MockProxy } from 'jest-mock-extended';
 import { SignInUsecase } from './signin-usecase';
-import { AuthRepoProtocol } from '@auth/protocols/repository';
-import { BcryptProtocol, JwtProtocol } from '@auth/protocols/cryptography';
+import { BcryptProtocol, JwtProtocol } from '../protocols/cryptography';
+import { AuthRepoProtocol } from '../protocols/repository';
 
 describe('SignIn Usecase', () => {
   let authRepositoryMock: MockProxy<AuthRepoProtocol>;

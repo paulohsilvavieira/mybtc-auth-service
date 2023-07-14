@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   BeforeInsert,
   Column,
   CreateDateColumn,
@@ -8,7 +9,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import * as crypto from 'node:crypto';
-import { UserEntity } from './UserEntity';
 @Entity({ name: 'authentications' })
 export class AuthenticationEntity {
   @PrimaryColumn()
@@ -27,11 +27,6 @@ export class AuthenticationEntity {
 
   @Column({ nullable: true })
   otp_active?: boolean;
-
-  @OneToOne(() => UserEntity, (user) => user.authenticationId, {
-    cascade: true,
-  })
-  userInfo: UserEntity;
 
   @CreateDateColumn()
   created_at: Date;

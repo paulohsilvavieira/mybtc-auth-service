@@ -1,9 +1,10 @@
 /* eslint-disable prefer-const */
 import { mock, MockProxy } from 'jest-mock-extended';
-import { AuthRepoProtocol } from '@auth/protocols/repository';
-import { BcryptProtocol } from '@auth/protocols/cryptography';
+import { mockRegisterAuthInput, throwError } from '../../../test/utils/mocks';
+import { BcryptProtocol } from '../protocols/cryptography';
+import { AuthRepoProtocol } from '../protocols/repository';
 import { RegisterAuthUsecase } from './register-auth-usecase';
-import { mockRegisterAuthInput, throwError } from '@tests/utils/mocks';
+
 describe('Register Auth Usecase', () => {
   let authRepositoryMock: MockProxy<AuthRepoProtocol>;
   let bcryptMock: MockProxy<BcryptProtocol>;

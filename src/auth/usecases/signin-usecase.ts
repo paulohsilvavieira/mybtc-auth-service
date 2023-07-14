@@ -1,11 +1,11 @@
-import { BcryptProtocol, JwtProtocol } from '@auth/protocols/cryptography';
-import { AuthRepoProtocol } from '@auth/protocols/repository';
 import { Injectable, Logger } from '@nestjs/common';
 import {
   SignInProtocol,
   SignInUsecaseInput,
   SignInUsecaseOutput,
 } from 'src/auth/protocols/usecases';
+import { BcryptProtocol, JwtProtocol } from '../protocols/cryptography';
+import { AuthRepoProtocol } from '../protocols/repository';
 
 @Injectable()
 export class SignInUsecase implements SignInProtocol {

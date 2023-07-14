@@ -1,4 +1,4 @@
-import { UserEntity } from '@entities/UserEntity';
+import { UserEntity } from '../../database/entities/UserEntity';
 import {
   CreateUserRepoInput,
   CreateUserRepoOutput,

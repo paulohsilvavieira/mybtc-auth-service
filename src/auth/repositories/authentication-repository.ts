@@ -4,8 +4,8 @@ import {
   CreateAuthRepoInput,
   CreateAuthRepoOutput,
   AuthRepoProtocol,
-} from '@auth/protocols/repository';
-import { AuthenticationEntity } from '@entities/AuthenticationEntity';
+} from '../protocols/repository';
+import { AuthenticationEntity } from '../../database/entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

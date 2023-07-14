@@ -85,7 +85,7 @@
     ],
     "testTimeout": 15000,
     "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "testRegex": [".*\\.spec\\.ts$"],
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
@@ -100,16 +100,8 @@
       "!**/*.module.(t|j)s",
       "!**/migrations/**",
       "!**/entities/**",
-      "!**/main.ts",
-      "!**/index.ts",
-      "!**/*.config.ts"
+      "!**/main.ts"
     ],
-    "moduleNameMapper": {
-      "@tests/(.*)": "<rootDir>/../test/$1",
-      "@auth/(.*)": "<rootDir>/auth/$1",
-      "@repository/(.*)": "<rootDir>/database/repositories/$1",
-      "@entities/(.*)": "<rootDir>/database/entities/$1"
-    },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }

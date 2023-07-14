@@ -11,7 +11,7 @@ import {
 import * as crypto from 'node:crypto';
 import { AuthenticationEntity } from './AuthenticationEntity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class UserEntity {
   @PrimaryColumn()
   id: string;
@@ -57,11 +57,10 @@ export class UserEntity {
   @Column({ nullable: true })
   status: string;
 
-  @Column({ nullable: true })
-  @OneToOne(() => AuthenticationEntity, (auth) => auth.userInfo, {
+  @OneToOne(() => AuthenticationEntity, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'authenticationId' })
+  @Column()
   authenticationId: string;
 
   @CreateDateColumn()
