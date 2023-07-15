@@ -1,8 +1,9 @@
+import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import { IMemoryDb, newDb } from 'pg-mem';
 import { DataSource } from 'typeorm';
 
 export const makeFakeDb = async (
-  entities?: any[],
+  entities: EntityClassOrSchema[],
 ): Promise<{ db: IMemoryDb; connection: DataSource }> => {
   const db = newDb();
 
@@ -16,14 +17,13 @@ export const makeFakeDb = async (
     name: 'version',
   });
 
-  const databaseConnection = db.adapters.createTypeormConnection({
-    type: 'postgres',
-    entities: entities ?? [__dirname + '../entities/index.{ts,js}'],
-  });
+  const databaseConnection: DataSource =
+    await db.adapters.createTypeormConnection({
+      type: 'postgres',
+      entities: entities,
+      logging: false,
+    });
+  await databaseConnection.synchronize();
 
-  const connection: DataSource = await databaseConnection.initialize();
-
-  await connection.synchronize();
-
-  return { db, connection };
+  return { db, connection: databaseConnection };
 };
