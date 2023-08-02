@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { RegisterAuthProtocol, SignInProtocol } from './protocols/usecases';
 import { SignInUsecase } from './usecases';
-import { AuthenticationEntity } from '@entities/AuthenticationEntity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthRepoProtocol } from './protocols/repository';
 import { AuthenticationRepository } from './repositories';
@@ -12,6 +11,7 @@ import { RegisterAuthUsecase } from './usecases/';
 import { JsonWebTokenService } from './services/jwt-service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { AuthenticationEntity } from '../database/entities';
 
 @Module({
   imports: [

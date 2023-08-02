@@ -1,6 +1,6 @@
-import { BcryptProtocol } from '@auth/protocols/cryptography';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { BcryptProtocol } from '../protocols/cryptography';
 
 @Injectable()
 export class BcryptService implements BcryptProtocol {

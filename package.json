@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "docker":"docker-compose up -d api_my_bitcoin_dev --no-recreate && docker exec -it api_my_bitcoin_dev /bin/sh",
+    "docker": "docker-compose up -d api_my_bitcoin_dev --no-recreate && docker exec -it api_my_bitcoin_dev /bin/sh",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -20,12 +20,12 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "npm test -- --config ./test/jest-e2e.json",
     "prepare": "husky install",
-    "test:staged": "npm test -- --findRelatedTests",
+    "test:staged": "npm test -- --findRelatedTests --passWithNoTests",
     "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
-    "migration:create": "npm run typeorm:cli -- migration:create ./src/infra/database/migrations/$npm_config_name",
+    "migration:create": "npm run typeorm:cli -- migration:create ./src/database/migrations/$npm_config_name",
     "migration:run": "npm run typeorm:cli -- migration:run -d ./typeorm-config.ts",
     "migration:revert": "npm run typeorm:cli -- migration:revert -d ./typeorm-config.ts",
-    "entity:create": "npm run typeorm:cli -- entity:create src/infra/database/entities/$npm_config_name && node typeorm-cli.js $npm_config_name"
+    "entity:create": "npm run typeorm:cli -- entity:create src/database/entities/$npm_config_name && node typeorm-cli.js $npm_config_name"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -45,6 +45,7 @@
     "winston": "^3.9.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
@@ -84,7 +85,7 @@
     ],
     "testTimeout": 15000,
     "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "testRegex": [".*\\.spec\\.ts$"],
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
@@ -99,16 +100,11 @@
       "!**/*.module.(t|j)s",
       "!**/migrations/**",
       "!**/entities/**",
+
       "!**/main.ts",
       "!**/index.ts",
       "!**/*.config.ts"
     ],
-    "moduleNameMapper": {
-      "@tests/(.*)": "<rootDir>/../test/$1",
-      "@auth/(.*)": "<rootDir>/auth/$1",
-      "@repository/(.*)": "<rootDir>/database/repositories/$1",
-      "@entities/(.*)": "<rootDir>/database/entities/$1"
-    },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }

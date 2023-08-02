@@ -1,11 +1,11 @@
-import { BcryptProtocol } from '@auth/protocols/cryptography';
-import { AuthRepoProtocol } from '@auth/protocols/repository';
 import { Injectable, Logger } from '@nestjs/common';
 import {
   RegisterAuthProtocol,
   RegisterAuthUsecaseInput,
   RegisterAuthUsecaseOutput,
-} from 'src/auth/protocols/usecases';
+} from '../protocols/usecases';
+import { BcryptProtocol } from '../protocols/cryptography';
+import { AuthRepoProtocol } from '../protocols/repository';
 
 @Injectable()
 export class RegisterAuthUsecase implements RegisterAuthProtocol {
@@ -50,7 +50,7 @@ export class RegisterAuthUsecase implements RegisterAuthProtocol {
         success,
       };
     } catch (error) {
-      this.logger.error(error.message);
+      this.logger.error({ message: error.message });
       return {
         success: false,
       };

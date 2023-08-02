@@ -1,8 +1,8 @@
 /* eslint-disable prefer-const */
 import { mock, MockProxy } from 'jest-mock-extended';
 import { SignInUsecase } from './signin-usecase';
-import { AuthRepoProtocol } from '@auth/protocols/repository';
-import { BcryptProtocol, JwtProtocol } from '@auth/protocols/cryptography';
+import { BcryptProtocol, JwtProtocol } from '../protocols/cryptography';
+import { AuthRepoProtocol } from '../protocols/repository';
 
 describe('SignIn Usecase', () => {
   let authRepositoryMock: MockProxy<AuthRepoProtocol>;
@@ -37,13 +37,29 @@ describe('SignIn Usecase', () => {
     });
     expect(token).toEqual('validToken');
   });
-  test('should return undefined token when send invalid credentials', async () => {
+  test('should return undefined token when dont send valid email credential', async () => {
     authRepositoryMock.verifyAuthByEmail.mockResolvedValueOnce({
       isValidEmail: false,
       password: undefined,
     });
+
     const { token } = await sut.exec({
       email: 'wrongemail@email.com',
+      password: 'wrongpassword',
+    });
+    expect(token).toBeUndefined();
+  });
+
+  test('should return undefined token when dont send valid password credential', async () => {
+    authRepositoryMock.verifyAuthByEmail.mockResolvedValueOnce({
+      isValidEmail: true,
+      password: '123456',
+    });
+
+    bcryptMock.verifyHash.mockResolvedValue({ isValid: false });
+
+    const { token } = await sut.exec({
+      email: 'valid@email.com',
       password: 'wrongpassword',
     });
     expect(token).toBeUndefined();

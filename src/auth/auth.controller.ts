@@ -7,11 +7,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import {
-  RegisterAuthProtocol,
-  RegisterAuthUsecaseInput,
   SignInProtocol,
+  RegisterAuthProtocol,
   SignInUsecaseInput,
-} from '@auth/protocols/usecases';
+  RegisterAuthUsecaseInput,
+} from './protocols/usecases';
 
 @Controller('auth')
 export class AuthController {

@@ -1,8 +1,10 @@
 /* eslint-disable prefer-const */
 import { mock, MockProxy } from 'jest-mock-extended';
-import { AuthRepoProtocol } from '@auth/protocols/repository';
-import { BcryptProtocol } from '@auth/protocols/cryptography';
+import { mockRegisterAuthInput, throwError } from '../../../test/utils/mocks';
+import { BcryptProtocol } from '../protocols/cryptography';
+import { AuthRepoProtocol } from '../protocols/repository';
 import { RegisterAuthUsecase } from './register-auth-usecase';
+
 describe('Register Auth Usecase', () => {
   let authRepositoryMock: MockProxy<AuthRepoProtocol>;
   let bcryptMock: MockProxy<BcryptProtocol>;
@@ -39,5 +41,14 @@ describe('Register Auth Usecase', () => {
       password: '12345678',
     });
     expect(result.success).toBeFalsy();
+  });
+
+  test('should return undefined token when send invalid credentials', async () => {
+    jest
+      .spyOn(authRepositoryMock, 'createAuth')
+      .mockImplementationOnce(throwError);
+    const promise = await sut.exec(mockRegisterAuthInput());
+
+    expect(promise.success).toBeFalsy();
   });
 });
