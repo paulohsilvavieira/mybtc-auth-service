@@ -28,3 +28,10 @@ export const mockSaveDocumentsUserInput =
     proofDocumentFront: faker.image.urlLoremFlickr(),
     authenticationId: faker.string.uuid(),
   });
+
+export const mockSaveDocumentsUserInputController = () => ({
+  document: faker.string.alpha(),
+  typeDocument: faker.string.alpha(),
+  proofDocumentBack: faker.image.urlLoremFlickr(),
+  proofDocumentFront: faker.image.urlLoremFlickr(),
+});

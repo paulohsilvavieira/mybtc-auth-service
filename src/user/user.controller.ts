@@ -16,8 +16,8 @@ import {
 } from './protocols/usecases';
 
 @Controller('user')
-export class AuthController {
-  private readonly logger = new Logger(AuthController.name);
+export class UserController {
+  private readonly logger = new Logger(UserController.name);
 
   constructor(
     private readonly createUser: CreateUserProtocol,
@@ -54,12 +54,15 @@ export class AuthController {
   }
 
   @Post('/save/documents')
-  async register(@Body() body: SaveDocumentsUserUsecaseInput): Promise<any> {
+  async saveDocuments(
+    @Body() body: SaveDocumentsUserUsecaseInput,
+  ): Promise<any> {
     this.logger.log('Request Received');
     this.logger.log('Send body to usecase!');
     const { success, error } = await this.saveDocumentsUser.exec(body);
     if (!success) {
       this.logger.log('Finish Request!');
+      console.log(error);
       throw new BadRequestException(error);
     }
     this.logger.log('Finish Request!');
