@@ -3,9 +3,13 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserRepository } from './user-repository';
 import { UserEntity } from '../../database/entities';
-import { mockCreateUserInput } from '../../../test/utils/mocks';
+import {
+  mockCreateUserInput,
+  mockSaveAddressUserInput,
+  mockSaveDocumentsUserInput,
+} from '../../../test/utils/mocks';
 
-describe('AuthenticationRepository', () => {
+describe('UserRepository', () => {
   let sut: UserRepository;
   let authRepositoryMock: Repository<UserEntity>;
 
@@ -56,6 +60,62 @@ describe('AuthenticationRepository', () => {
     expect(result).toEqual({
       success: false,
       error: 'Error on Save User Info',
+    });
+  });
+
+  test('should return success: true, if save user address', async () => {
+    jest.spyOn(authRepositoryMock, 'update').mockResolvedValue({
+      affected: 1,
+      raw: 'any',
+      generatedMaps: {} as any,
+    });
+
+    const result = await sut.saveAddressUser(mockSaveAddressUserInput());
+
+    expect(result).toEqual({
+      success: true,
+    });
+  });
+
+  test('should return success: false, if dont save user address info', async () => {
+    jest.spyOn(authRepositoryMock, 'update').mockResolvedValue({
+      affected: 0,
+      raw: 'any',
+      generatedMaps: {} as any,
+    });
+    const result = await sut.saveAddressUser(mockSaveAddressUserInput());
+
+    expect(result).toEqual({
+      success: false,
+      error: 'Error on Save Address User Info',
+    });
+  });
+
+  test('should return success: true, if save user documents info', async () => {
+    jest.spyOn(authRepositoryMock, 'update').mockResolvedValue({
+      affected: 1,
+      raw: 'any',
+      generatedMaps: {} as any,
+    });
+
+    const result = await sut.saveDocuments(mockSaveDocumentsUserInput());
+
+    expect(result).toEqual({
+      success: true,
+    });
+  });
+
+  test('should return success: false, if dont save user documents info', async () => {
+    jest.spyOn(authRepositoryMock, 'update').mockResolvedValue({
+      affected: 0,
+      raw: 'any',
+      generatedMaps: {} as any,
+    });
+    const result = await sut.saveDocuments(mockSaveDocumentsUserInput());
+
+    expect(result).toEqual({
+      success: false,
+      error: 'Error on Save Documents User Info',
     });
   });
 });
