@@ -1,10 +1,8 @@
 import {
-  BaseEntity,
   BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
-  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';

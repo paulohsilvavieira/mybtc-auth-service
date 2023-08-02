@@ -100,7 +100,10 @@
       "!**/*.module.(t|j)s",
       "!**/migrations/**",
       "!**/entities/**",
-      "!**/main.ts"
+
+      "!**/main.ts",
+      "!**/index.ts",
+      "!**/*.config.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
