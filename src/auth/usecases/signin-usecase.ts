@@ -22,7 +22,7 @@ export class SignInUsecase implements SignInProtocol {
       await this.authRepository.verifyAuthByEmail({
         email: params.email,
       });
-    console.log(password, authorizationId);
+
     if (!password) {
       return {
         token: undefined,

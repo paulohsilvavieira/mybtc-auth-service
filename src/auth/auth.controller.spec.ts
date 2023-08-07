@@ -7,7 +7,6 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 describe('AuthController', () => {
   let authController: AuthController;
   let signInUsecaseMock: MockProxy<SignInProtocol>;
-
   let registerAuthUsecaseMock: MockProxy<RegisterAuthProtocol>;
   beforeAll(() => {
     signInUsecaseMock = mock();
