@@ -41,12 +41,10 @@ describe('JsonWebTokenService', () => {
   });
   describe('verifyToken()', () => {
     it('should return payload with valid token', async () => {
-      const payload = { id: 1, name: 'Usuário' };
+      const payload = { authorizationId: '12345' };
       const token = 'token';
 
-      jest.spyOn(jwtServiceMock, 'verifyAsync').mockResolvedValue({
-        payload,
-      });
+      jest.spyOn(jwtServiceMock, 'verifyAsync').mockResolvedValue(payload);
 
       const result = await jsonWebTokenService.verifyToken(token);
 

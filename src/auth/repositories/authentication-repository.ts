@@ -31,12 +31,13 @@ export class AuthenticationRepository implements AuthRepoProtocol {
   async verifyAuthByEmail(
     params: VerifyAuthRepoInput,
   ): Promise<VerifyAuthRepoOutput> {
-    const user = await this.authTypeOrmRepository.findOneBy({
+    const auth = await this.authTypeOrmRepository.findOneBy({
       email: params.email,
     });
     return {
-      isValidEmail: user !== null,
-      password: user !== null ? user.password : undefined,
+      isValidEmail: auth !== null,
+      password: auth !== null ? auth.password : undefined,
+      authorizationId: auth !== null ? auth.id : undefined,
     };
   }
 }

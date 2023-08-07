@@ -12,6 +12,7 @@ export type VerifyAuthRepoInput = {
 export type VerifyAuthRepoOutput = {
   isValidEmail: boolean;
   password: string | undefined;
+  authorizationId: string | undefined;
 };
 
 export type CreateAuthRepoInput = {

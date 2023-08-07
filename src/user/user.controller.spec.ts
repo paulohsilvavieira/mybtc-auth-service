@@ -5,18 +5,26 @@ import {
   SaveDocumentsUserProtocol,
 } from './protocols/usecases';
 import { MockProxy, mock } from 'jest-mock-extended';
-import { BadRequestException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserController } from './user.controller';
 import {
   mockCreateUserInput,
   mockSaveAddressUserInput,
   mockSaveDocumentsUserInput,
 } from '../../test/utils/mocks';
+import { ApiTokenGuard } from '../auth/guards/api-token.guard';
+
+import { JwtProtocol } from '../auth/protocols/cryptography';
 
 describe('UserController', () => {
   let userController: UserController;
   let createUserUsecaseMock: MockProxy<CreateUserProtocol>;
-
+  let jsonWebTokenMock: MockProxy<JwtProtocol>; // to use with guard
+  let apiTokenGuard: ApiTokenGuard;
   let saveAddressUserUsecaseMock: MockProxy<SaveAddressUserProtocol>;
   let saveDocumentsUserUsecaseMock: MockProxy<SaveDocumentsUserProtocol>;
 
@@ -24,6 +32,8 @@ describe('UserController', () => {
     createUserUsecaseMock = mock();
     saveDocumentsUserUsecaseMock = mock();
     saveAddressUserUsecaseMock = mock();
+    jsonWebTokenMock = mock();
+
     createUserUsecaseMock.exec.mockResolvedValue({
       success: true,
     });
@@ -32,6 +42,15 @@ describe('UserController', () => {
     });
     saveAddressUserUsecaseMock.exec.mockResolvedValue({
       success: true,
+    });
+    saveAddressUserUsecaseMock.exec.mockResolvedValue({
+      success: true,
+    });
+    jsonWebTokenMock.verifyToken.mockResolvedValue({
+      isValid: true,
+      payload: {
+        authorizationId: 'dumy',
+      },
     });
   });
 
@@ -51,8 +70,23 @@ describe('UserController', () => {
           provide: SaveDocumentsUserProtocol,
           useValue: saveDocumentsUserUsecaseMock,
         },
+        {
+          provide: SaveDocumentsUserProtocol,
+          useValue: saveDocumentsUserUsecaseMock,
+        },
+        {
+          provide: SaveDocumentsUserProtocol,
+          useValue: saveDocumentsUserUsecaseMock,
+        },
+        {
+          provide: JwtProtocol,
+          useValue: jsonWebTokenMock,
+        },
       ],
     }).compile();
+    apiTokenGuard = module.get(ApiTokenGuard);
+
+    jest.spyOn(apiTokenGuard, 'canActivate').mockResolvedValueOnce(true);
 
     userController = module.get<UserController>(UserController);
   });

@@ -7,7 +7,6 @@ import {
 import { BcryptProtocol, JwtProtocol } from '../protocols/cryptography';
 import { AuthRepoProtocol } from '../protocols/repository';
 
-@Injectable()
 export class SignInUsecase implements SignInProtocol {
   private readonly logger = new Logger(SignInUsecase.name);
 
@@ -19,9 +18,11 @@ export class SignInUsecase implements SignInProtocol {
   async exec(params: SignInUsecaseInput): Promise<SignInUsecaseOutput> {
     this.logger.log({ message: 'Start processing auth' });
 
-    const { password } = await this.authRepository.verifyAuthByEmail({
-      email: params.email,
-    });
+    const { password, authorizationId } =
+      await this.authRepository.verifyAuthByEmail({
+        email: params.email,
+      });
+    console.log(password, authorizationId);
     if (!password) {
       return {
         token: undefined,
@@ -29,13 +30,14 @@ export class SignInUsecase implements SignInProtocol {
     }
 
     const { isValid: isValidPassword } = await this.bcrypt.verifyHash(
-      password,
       params.password,
+      password,
     );
 
     if (isValidPassword) {
       const { token } = await this.jwt.createToken({
         email: params.email,
+        authorizationId,
       });
       this.logger.log({ message: 'Valid Email and Password' });
       this.logger.log({ message: 'Authentication Proccess Successful!' });

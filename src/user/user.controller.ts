@@ -2,8 +2,10 @@ import {
   BadRequestException,
   Body,
   Controller,
+  HttpCode,
   Logger,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
 import {
@@ -14,6 +16,7 @@ import {
   SaveDocumentsUserProtocol,
   SaveDocumentsUserUsecaseInput,
 } from './protocols/usecases';
+import { ApiTokenGuard } from '../auth/guards/api-token.guard';
 
 @Controller('user')
 export class UserController {
@@ -25,6 +28,8 @@ export class UserController {
     private readonly saveDocumentsUser: SaveDocumentsUserProtocol,
   ) {}
   @Post('/save/basicInfo')
+  @HttpCode(200)
+  @UseGuards(ApiTokenGuard)
   async saveBasicInfo(@Body() body: CreateUserUsecaseInput): Promise<any> {
     this.logger.log('Start Request');
     this.logger.log('Send Body to usecase!');
@@ -40,6 +45,8 @@ export class UserController {
   }
 
   @Post('/save/address')
+  @HttpCode(200)
+  @UseGuards(ApiTokenGuard)
   async saveAddress(@Body() body: SaveAddressUserUsecaseInput): Promise<any> {
     this.logger.log('Request Received');
     this.logger.log('Send body to usecase!');
@@ -54,6 +61,8 @@ export class UserController {
   }
 
   @Post('/save/documents')
+  @HttpCode(200)
+  @UseGuards(ApiTokenGuard)
   async saveDocuments(
     @Body() body: SaveDocumentsUserUsecaseInput,
   ): Promise<any> {
@@ -62,7 +71,6 @@ export class UserController {
     const { success, error } = await this.saveDocumentsUser.exec(body);
     if (!success) {
       this.logger.log('Finish Request!');
-      console.log(error);
       throw new BadRequestException(error);
     }
     this.logger.log('Finish Request!');
