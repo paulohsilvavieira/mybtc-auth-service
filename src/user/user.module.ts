@@ -11,9 +11,13 @@ import {
 import { CreateUserUseCase } from './usecases/create-user-usecase';
 import { SaveAddressUserUseCase } from './usecases/save-address-info-user-usecase';
 import { SaveDocumentsUserUseCase } from './usecases/save-documents-user-usecase';
+import { UserController } from './user.controller';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity])],
+  imports: [AuthModule, TypeOrmModule.forFeature([UserEntity])],
+  controllers: [UserController],
+
   providers: [
     {
       provide: UserRepoProtocol,

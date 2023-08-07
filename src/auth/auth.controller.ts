@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  HttpCode,
   Logger,
   Post,
   UnauthorizedException,
@@ -22,6 +23,7 @@ export class AuthController {
     private readonly registerAuthUsecase: RegisterAuthProtocol,
   ) {}
   @Post('/login')
+  @HttpCode(200)
   async login(@Body() body: SignInUsecaseInput): Promise<any> {
     this.logger.log('Start Request');
     this.logger.log('Send Body to usecase!');

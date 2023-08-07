@@ -49,7 +49,8 @@
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
-    "@swc/jest": "^0.2.26",
+    "@swc/core": "^1.3.74",
+    "@swc/jest": "^0.2.28",
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
     "@types/jest": "29.5.0",
@@ -83,11 +84,12 @@
       "json",
       "ts"
     ],
-    "testTimeout": 15000,
     "rootDir": "src",
-    "testRegex": [".*\\.spec\\.ts$"],
+    "testRegex": [
+      ".*\\.spec\\.ts$"
+    ],
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)s$": ["@swc/jest"]
     },
     "coverageThreshold": {
       "global": {
@@ -100,7 +102,6 @@
       "!**/*.module.(t|j)s",
       "!**/migrations/**",
       "!**/entities/**",
-
       "!**/main.ts",
       "!**/index.ts",
       "!**/*.config.ts"

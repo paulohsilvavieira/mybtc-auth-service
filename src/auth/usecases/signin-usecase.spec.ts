@@ -17,6 +17,7 @@ describe('SignIn Usecase', () => {
     authRepositoryMock.verifyAuthByEmail.mockResolvedValue({
       isValidEmail: true,
       password: 'any_password',
+      authorizationId: '12345',
     });
     bcryptMock.verifyHash.mockResolvedValue({
       isValid: true,
@@ -41,6 +42,7 @@ describe('SignIn Usecase', () => {
     authRepositoryMock.verifyAuthByEmail.mockResolvedValueOnce({
       isValidEmail: false,
       password: undefined,
+      authorizationId: undefined,
     });
 
     const { token } = await sut.exec({
@@ -54,6 +56,7 @@ describe('SignIn Usecase', () => {
     authRepositoryMock.verifyAuthByEmail.mockResolvedValueOnce({
       isValidEmail: true,
       password: '123456',
+      authorizationId: '12345',
     });
 
     bcryptMock.verifyHash.mockResolvedValue({ isValid: false });

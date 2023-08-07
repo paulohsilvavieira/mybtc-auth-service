@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtProtocol } from '../protocols/cryptography';
 
@@ -6,7 +6,7 @@ import { JwtProtocol } from '../protocols/cryptography';
 export class JsonWebTokenService implements JwtProtocol {
   private readonly logger = new Logger(JsonWebTokenService.name);
 
-  constructor(private jwtService: JwtService) {}
+  constructor(@Inject(JwtService) private jwtService: JwtService) {}
 
   async createToken(payload: any): Promise<{ token: string }> {
     const token = await this.jwtService.signAsync(payload);
@@ -16,7 +16,7 @@ export class JsonWebTokenService implements JwtProtocol {
     token: string,
   ): Promise<{ isValid: boolean; payload: any }> {
     try {
-      const { payload } = await this.jwtService.verifyAsync(token);
+      const payload = await this.jwtService.verifyAsync(token);
       return {
         isValid: true,
         payload,

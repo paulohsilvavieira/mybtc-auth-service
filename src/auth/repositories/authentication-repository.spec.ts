@@ -56,6 +56,7 @@ describe('AuthenticationRepository', () => {
     expect(result).toEqual({
       isValidEmail: true,
       password: 'test2',
+      authorizationId: 'teste',
     });
   });
 
