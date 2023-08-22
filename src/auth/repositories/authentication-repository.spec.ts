@@ -10,7 +10,6 @@ describe('AuthenticationRepository', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [],
       providers: [
         AuthenticationRepository,
         {
@@ -20,7 +19,7 @@ describe('AuthenticationRepository', () => {
       ],
     }).compile();
 
-    sut = moduleRef.get<AuthenticationRepository>(AuthenticationRepository);
+    sut = moduleRef.get(AuthenticationRepository);
     authRepositoryMock = moduleRef.get<Repository<AuthenticationEntity>>(
       getRepositoryToken(AuthenticationEntity),
     );

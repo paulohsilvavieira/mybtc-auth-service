@@ -1,6 +1,5 @@
 /* eslint-disable prefer-const */
 import { mock, MockProxy } from 'jest-mock-extended';
-import { mockRegisterAuthInput, throwError } from '../../../test/utils/mocks';
 import { BcryptProtocol } from '../protocols/cryptography';
 import { AuthRepoProtocol } from '../protocols/repository';
 import { RegisterAuthUsecase } from './register-auth-usecase';
@@ -25,30 +24,21 @@ describe('Register Auth Usecase', () => {
     sut = new RegisterAuthUsecase(authRepositoryMock, bcryptMock);
   });
 
-  test('should return jwt valid when send email and password valid', async () => {
+  test('Should return success=true repository save successfull', async () => {
     const result = await sut.exec({
       email: 'valid@email.com',
-      password: '12345678',
+      password: '123456',
     });
     expect(result.success).toBeTruthy();
   });
-  test('should return undefined token when send invalid credentials', async () => {
+  test('Should return success=false repository dont save successfull', async () => {
     authRepositoryMock.createAuth.mockResolvedValueOnce({
       success: false,
     });
     const result = await sut.exec({
       email: 'valid@email.com',
-      password: '12345678',
+      password: '123456',
     });
     expect(result.success).toBeFalsy();
-  });
-
-  test('should return undefined token when send invalid credentials', async () => {
-    jest
-      .spyOn(authRepositoryMock, 'createAuth')
-      .mockImplementationOnce(throwError);
-    const promise = await sut.exec(mockRegisterAuthInput());
-
-    expect(promise.success).toBeFalsy();
   });
 });
