@@ -79,7 +79,6 @@
     "typescript": "^4.7.4"
   },
   "jest": {
-    
     "moduleFileExtensions": [
       "js",
       "json",
@@ -90,9 +89,12 @@
       ".*\\.spec\\.ts$"
     ],
     "transform": {
-      "^.+\\.(t|j)s$":["ts-jest", {
-        "isolatedModules": true
-      }]
+      "^.+\\.(t|j)s$": [
+        "ts-jest",
+        {
+          "isolatedModules": false
+        }
+      ]
     },
     "coverageThreshold": {
       "global": {
