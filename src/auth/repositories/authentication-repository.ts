@@ -4,6 +4,8 @@ import {
   CreateAuthRepoInput,
   CreateAuthRepoOutput,
   AuthRepoProtocol,
+  UpdatePasswordRepoInput,
+  UpdatePasswordRepoOutput,
 } from '../protocols/repository';
 import { AuthenticationEntity } from '../../database/entities';
 import { Injectable, Logger } from '@nestjs/common';
@@ -18,6 +20,26 @@ export class AuthenticationRepository implements AuthRepoProtocol {
     @InjectRepository(AuthenticationEntity)
     private readonly authTypeOrmRepository: Repository<AuthenticationEntity>,
   ) {}
+
+  async updatePassword(
+    params: UpdatePasswordRepoInput,
+  ): Promise<UpdatePasswordRepoOutput> {
+    this.logger.log({
+      message: 'Start process to update password',
+    });
+    const result = await this.authTypeOrmRepository.update(
+      {
+        id: params.authorizationId,
+        password: params.oldPassword,
+      },
+      {
+        password: params.newPassword,
+      },
+    );
+    return {
+      success: result.affected > 0,
+    };
+  }
   async createAuth(params: CreateAuthRepoInput): Promise<CreateAuthRepoOutput> {
     this.logger.log({
       message: 'Start process to save Authentication info on Database',
