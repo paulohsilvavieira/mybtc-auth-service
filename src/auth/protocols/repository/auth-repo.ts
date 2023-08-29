@@ -4,6 +4,9 @@ export abstract class AuthRepoProtocol {
   ) => Promise<VerifyAuthRepoOutput>;
 
   createAuth: (params: CreateAuthRepoInput) => Promise<CreateAuthRepoOutput>;
+  updatePassword: (
+    params: UpdatePasswordRepoInput,
+  ) => Promise<UpdatePasswordRepoOutput>;
 }
 
 export type VerifyAuthRepoInput = {
@@ -20,5 +23,15 @@ export type CreateAuthRepoInput = {
   password: string;
 };
 export type CreateAuthRepoOutput = {
+  success: boolean;
+};
+
+export type UpdatePasswordRepoInput = {
+  oldPassword: string;
+  newPassword: string;
+  authorizationId: string;
+};
+
+export type UpdatePasswordRepoOutput = {
   success: boolean;
 };
