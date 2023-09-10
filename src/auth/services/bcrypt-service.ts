@@ -6,8 +6,9 @@ import { BcryptProtocol } from '../protocols/cryptography';
 export class BcryptService implements BcryptProtocol {
   constructor(private readonly salt: number) {}
   async encrypt(plaintext: string): Promise<{ hashText: string }> {
+    const hashText = await bcrypt.hash(plaintext, this.salt);
     return {
-      hashText: await bcrypt.hash(plaintext, this.salt),
+      hashText,
     };
   }
 

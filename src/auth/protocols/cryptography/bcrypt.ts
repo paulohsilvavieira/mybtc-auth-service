@@ -2,7 +2,7 @@ export abstract class BcryptProtocol {
   encrypt: (plainText: string) => Promise<{ hashText: string }>;
 
   verifyHash: (
-    hashedText: string,
     plainText: string,
+    hashedText: string,
   ) => Promise<{ isValid: boolean }>;
 }

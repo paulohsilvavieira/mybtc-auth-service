@@ -2,13 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { makeFakeDb } from './utils/mocks';
-import { DataSource } from 'typeorm';
+import { DataSource, Db } from 'typeorm';
 import { IBackup } from 'pg-mem';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '../src/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthenticationEntity, UserEntity } from '../src/database/entities';
 import { createNestLogger } from '../src/config/logger.config';
+import { getToken } from './utils/mocks/requestToken';
 
 describe('Auth Module (e2e)', () => {
   let app: INestApplication;
@@ -19,10 +20,6 @@ describe('Auth Module (e2e)', () => {
     connectionFake = connection;
 
     backup = db.backup();
-  });
-
-  beforeEach(async () => {
-    backup.restore();
 
     const logger = createNestLogger();
 
@@ -45,6 +42,10 @@ describe('Auth Module (e2e)', () => {
     await app.init();
   });
 
+  beforeEach(async () => {
+    backup.restore();
+  });
+
   test('/auth/register (POST)', () => {
     return request(app.getHttpServer())
       .post('/auth/register')
@@ -55,7 +56,7 @@ describe('Auth Module (e2e)', () => {
       .expect(201);
   });
 
-  test('/auth/login (POST)', () => {
+  test('/auth/login (POST)', async () => {
     const requestApp = request(app.getHttpServer());
 
     return request(app.getHttpServer())
@@ -90,6 +91,21 @@ describe('Auth Module (e2e)', () => {
             });
           });
       });
+  });
+
+  test('/auth/update/password (PUT)', async () => {
+    const requestApp = request(app.getHttpServer());
+
+    const token = await getToken(requestApp);
+
+    requestApp
+      .put('/auth/update/password')
+      .send({
+        oldPassword: '12345678',
+        newPassword: '123456',
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
   });
 
   afterAll(async () => {
