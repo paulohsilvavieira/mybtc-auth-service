@@ -5,7 +5,9 @@ import {
   HttpCode,
   Logger,
   Post,
+  Put,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import {
   SignInProtocol,
@@ -13,6 +15,11 @@ import {
   SignInUsecaseInput,
   RegisterAuthUsecaseInput,
 } from './protocols/usecases';
+import {
+  UpdatePasswordUseCaseInput,
+  UpdatePasswordUseCaseProtocol,
+} from './protocols/usecases/update-password';
+import { ApiTokenGuard } from './guards/api-token.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -21,6 +28,7 @@ export class AuthController {
   constructor(
     private readonly singInUsecase: SignInProtocol,
     private readonly registerAuthUsecase: RegisterAuthProtocol,
+    private readonly updatePasswordUsecase: UpdatePasswordUseCaseProtocol,
   ) {}
   @Post('/login')
   @HttpCode(200)
@@ -35,10 +43,11 @@ export class AuthController {
     }
     this.logger.log('Finish Request!');
 
-    return token;
+    return { token };
   }
 
   @Post('/register')
+  @HttpCode(201)
   async register(@Body() body: RegisterAuthUsecaseInput): Promise<any> {
     this.logger.log('Request Received');
     this.logger.log('Send body to usecase!');
@@ -50,5 +59,18 @@ export class AuthController {
     this.logger.log('Finish Request!');
 
     return { msg: 'User Created!' };
+  }
+  @Put('/update/password')
+  @UseGuards(ApiTokenGuard)
+  @HttpCode(200)
+  async updatePassword(@Body() body: UpdatePasswordUseCaseInput) {
+    const result = await this.updatePasswordUsecase.exec(body);
+    if (!result.success) {
+      throw new BadRequestException('Error on Update password');
+    }
+
+    return {
+      msg: 'Password updated!',
+    };
   }
 }

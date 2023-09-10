@@ -20,6 +20,14 @@ export class AuthenticationRepository implements AuthRepoProtocol {
     @InjectRepository(AuthenticationEntity)
     private readonly authTypeOrmRepository: Repository<AuthenticationEntity>,
   ) {}
+  async findById(authorizationId: string): Promise<{ password: string }> {
+    const auth = await this.authTypeOrmRepository.findOneBy({
+      id: authorizationId,
+    });
+    return {
+      password: auth !== null ? auth.password : undefined,
+    };
+  }
 
   async updatePassword(
     params: UpdatePasswordRepoInput,
@@ -27,10 +35,10 @@ export class AuthenticationRepository implements AuthRepoProtocol {
     this.logger.log({
       message: 'Start process to update password',
     });
+
     const result = await this.authTypeOrmRepository.update(
       {
         id: params.authorizationId,
-        password: params.oldPassword,
       },
       {
         password: params.newPassword,
@@ -44,6 +52,7 @@ export class AuthenticationRepository implements AuthRepoProtocol {
     this.logger.log({
       message: 'Start process to save Authentication info on Database',
     });
+
     const entityToSave = this.authTypeOrmRepository.create({
       email: params.email,
       password: params.password,

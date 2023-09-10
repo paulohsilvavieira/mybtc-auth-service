@@ -3,18 +3,33 @@ import { AuthController } from './auth.controller';
 import { RegisterAuthProtocol, SignInProtocol } from './protocols/usecases';
 import { MockProxy, mock } from 'jest-mock-extended';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { UpdatePasswordUseCaseProtocol } from './protocols/usecases/update-password';
+import { JwtProtocol } from './protocols/cryptography';
+import { ApiTokenGuard } from './guards/api-token.guard';
 
 describe('AuthController', () => {
   let authController: AuthController;
   let signInUsecaseMock: MockProxy<SignInProtocol>;
   let registerAuthUsecaseMock: MockProxy<RegisterAuthProtocol>;
+  let updatePasswordUsecaseMock: MockProxy<UpdatePasswordUseCaseProtocol>;
+  let jsonWebTokenMock: MockProxy<JwtProtocol>; // to use with guard
+  let apiTokenGuard: ApiTokenGuard;
+
   beforeAll(() => {
     signInUsecaseMock = mock();
+    updatePasswordUsecaseMock = mock();
     registerAuthUsecaseMock = mock();
+    jsonWebTokenMock = mock();
     signInUsecaseMock.exec.mockResolvedValue({
       token: 'validToken',
     });
     registerAuthUsecaseMock.exec.mockResolvedValue({ success: true });
+    jsonWebTokenMock.verifyToken.mockResolvedValue({
+      isValid: true,
+      payload: {
+        authorizationId: 'dummy',
+      },
+    });
   });
 
   beforeEach(async () => {
@@ -29,8 +44,19 @@ describe('AuthController', () => {
           provide: RegisterAuthProtocol,
           useValue: registerAuthUsecaseMock,
         },
+        {
+          provide: UpdatePasswordUseCaseProtocol,
+          useValue: updatePasswordUsecaseMock,
+        },
+        {
+          provide: JwtProtocol,
+          useValue: jsonWebTokenMock,
+        },
       ],
     }).compile();
+    apiTokenGuard = module.get(ApiTokenGuard);
+
+    jest.spyOn(apiTokenGuard, 'canActivate').mockResolvedValueOnce(true);
 
     authController = module.get<AuthController>(AuthController);
   });
@@ -56,7 +82,7 @@ describe('AuthController', () => {
         password: 'validPassword',
       };
       const result = await authController.login(validUserCredentials);
-      expect(result).toEqual('validToken');
+      expect(result.token).toEqual('validToken');
     });
   });
   describe('register', () => {
