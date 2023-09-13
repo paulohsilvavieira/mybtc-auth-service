@@ -11,9 +11,18 @@ export abstract class AuthRepoProtocol {
   updatePassword: (
     params: UpdatePasswordRepoInput,
   ) => Promise<UpdatePasswordRepoOutput>;
+
+  saveTokenRecoverPassword: (
+    params: SaveTokenRecoverPassword,
+  ) => Promise<{ success: boolean }>;
 }
 
 export type VerifyAuthRepoInput = {
+  email: string;
+};
+
+export type SaveTokenRecoverPassword = {
+  token: string;
   email: string;
 };
 export type VerifyAuthRepoOutput = {
