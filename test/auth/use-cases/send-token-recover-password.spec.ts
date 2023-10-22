@@ -1,43 +1,44 @@
 import { mock, MockProxy } from 'jest-mock-extended';
-import { MailerServiceProtocol } from 'src/services/protocols/mail-services';
-import { AuthRepoProtocol } from '../protocols/repository';
-import { SendTokenRecoverPasswordUsecase } from './send-token-recover-password-usecase';
+import { AuthRepoProtocol } from '../../../src/auth/protocols/repository';
+import { SendTokenRecoverPasswordUsecase } from '../../../src/auth/usecases/send-token-recover-password-usecase';
+import { JwtProtocol } from '../../../src/auth/protocols/cryptography';
+import { Test, TestingModule } from '@nestjs/testing';
 
 describe('SendTokenRecoverPasswordUsecase', () => {
-  let mailerServiceMock: MockProxy<MailerServiceProtocol>;
   let authRepoMock: MockProxy<AuthRepoProtocol>;
-
+  let jwtMock: MockProxy<JwtProtocol>;
   let sut: SendTokenRecoverPasswordUsecase;
   beforeAll(() => {
-    mailerServiceMock = mock();
     authRepoMock = mock();
+    jwtMock = mock();
     authRepoMock.saveTokenRecoverPassword.mockResolvedValue({
       success: true,
     });
-    mailerServiceMock.sendEmail.mockResolvedValue({
-      success: true,
-      messageId: 'any_id',
+    jwtMock.createToken.mockResolvedValue({
+      token: 'validToken',
     });
   });
 
-  beforeEach(() => {
-    sut = new SendTokenRecoverPasswordUsecase(mailerServiceMock, authRepoMock);
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        SendTokenRecoverPasswordUsecase,
+        {
+          provide: AuthRepoProtocol,
+          useValue: authRepoMock,
+        },
+        {
+          provide: JwtProtocol,
+          useValue: jwtMock,
+        },
+      ],
+    }).compile();
+    sut = module.get(SendTokenRecoverPasswordUsecase);
   });
-
-  beforeAll(() => {});
 
   test('should return true if email recover password sended sucessfull', async () => {
     const result = await sut.exec({ email: 'any@email.com' });
     expect(result.success).toEqual(true);
-  });
-
-  test('should return false if email recover password  dont sended sucessfull', async () => {
-    mailerServiceMock.sendEmail.mockResolvedValueOnce({
-      success: false,
-      messageId: undefined,
-    });
-    const result = await sut.exec({ email: 'any@email.com' });
-    expect(result.success).toEqual(false);
   });
 
   test('should return false if dont find auth info to save token recover by email', async () => {

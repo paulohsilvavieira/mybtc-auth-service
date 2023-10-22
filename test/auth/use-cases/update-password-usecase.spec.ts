@@ -1,7 +1,8 @@
 import { mock, MockProxy } from 'jest-mock-extended';
-import { BcryptProtocol } from '../protocols/cryptography';
-import { AuthRepoProtocol } from '../protocols/repository/auth-repo';
-import { UpdatePasswordUseCase } from './update-password-usecase';
+import { BcryptProtocol } from '../../../src/auth/protocols/cryptography';
+import { AuthRepoProtocol } from '../../../src/auth/protocols/repository/auth-repo';
+import { UpdatePasswordUseCase } from '../../../src/auth/usecases/update-password-usecase';
+import { Test, TestingModule } from '@nestjs/testing';
 describe('Update passsword', () => {
   let sut: UpdatePasswordUseCase;
   let authRepo: MockProxy<AuthRepoProtocol>;
@@ -19,8 +20,22 @@ describe('Update passsword', () => {
       isValid: true,
     });
   });
-  beforeEach(() => {
-    sut = new UpdatePasswordUseCase(authRepo, bcryptMock);
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        UpdatePasswordUseCase,
+        {
+          provide: AuthRepoProtocol,
+          useValue: authRepo,
+        },
+        {
+          provide: BcryptProtocol,
+          useValue: bcryptMock,
+        },
+      ],
+    }).compile();
+    // sut = new UpdatePasswordUseCase(authRepo, bcryptMock);
+    sut = module.get(UpdatePasswordUseCase);
   });
   test('should return true if process update passsword works', async () => {
     const result = await sut.exec({

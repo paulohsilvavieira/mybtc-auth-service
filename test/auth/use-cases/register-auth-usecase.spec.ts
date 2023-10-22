@@ -1,8 +1,9 @@
 /* eslint-disable prefer-const */
 import { mock, MockProxy } from 'jest-mock-extended';
-import { BcryptProtocol } from '../protocols/cryptography';
-import { AuthRepoProtocol } from '../protocols/repository';
-import { RegisterAuthUsecase } from './register-auth-usecase';
+import { BcryptProtocol } from '../../../src/auth/protocols/cryptography';
+import { AuthRepoProtocol } from '../../../src/auth/protocols/repository';
+import { RegisterAuthUsecase } from '../../../src/auth/usecases/register-auth-usecase';
+import { Test, TestingModule } from '@nestjs/testing';
 
 describe('Register Auth Usecase', () => {
   let authRepositoryMock: MockProxy<AuthRepoProtocol>;
@@ -20,8 +21,21 @@ describe('Register Auth Usecase', () => {
     });
   });
 
-  beforeEach(() => {
-    sut = new RegisterAuthUsecase(authRepositoryMock, bcryptMock);
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        RegisterAuthUsecase,
+        {
+          provide: AuthRepoProtocol,
+          useValue: authRepositoryMock,
+        },
+        {
+          provide: BcryptProtocol,
+          useValue: bcryptMock,
+        },
+      ],
+    }).compile();
+    sut = module.get(RegisterAuthUsecase);
   });
 
   test('Should return success=true repository save successfull', async () => {

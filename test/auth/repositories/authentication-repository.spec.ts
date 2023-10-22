@@ -1,8 +1,8 @@
-import { AuthenticationRepository } from './authentication-repository';
+import { AuthenticationRepository } from '../../../src/auth/repositories/authentication-repository';
 import { Repository } from 'typeorm';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { AuthenticationEntity } from '../../database/entities';
+import { AuthenticationEntity } from '../../../src/database/entities';
 
 describe('AuthenticationRepository', () => {
   let sut: AuthenticationRepository;

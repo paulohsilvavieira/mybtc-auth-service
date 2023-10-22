@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
-import { JsonWebTokenService } from './jwt-service';
+import { JsonWebTokenService } from '../../../src/auth/services/jwt-service';
 
 describe('JsonWebTokenService', () => {
   let jsonWebTokenService: JsonWebTokenService;

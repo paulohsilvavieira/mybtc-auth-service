@@ -1,8 +1,12 @@
 /* eslint-disable prefer-const */
 import { mock, MockProxy } from 'jest-mock-extended';
-import { SignInUsecase } from './signin-usecase';
-import { BcryptProtocol, JwtProtocol } from '../protocols/cryptography';
-import { AuthRepoProtocol } from '../protocols/repository';
+import { SignInUsecase } from '../../../src/auth/usecases/signin-usecase';
+import {
+  BcryptProtocol,
+  JwtProtocol,
+} from '../../../src/auth/protocols/cryptography';
+import { AuthRepoProtocol } from '../../../src/auth/protocols/repository';
+import { Test, TestingModule } from '@nestjs/testing';
 
 describe('SignIn Usecase', () => {
   let authRepositoryMock: MockProxy<AuthRepoProtocol>;
@@ -27,8 +31,27 @@ describe('SignIn Usecase', () => {
     });
   });
 
-  beforeEach(() => {
-    sut = new SignInUsecase(authRepositoryMock, bcryptMock, jsonWebTokenMock);
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        SignInUsecase,
+        {
+          provide: AuthRepoProtocol,
+          useValue: authRepositoryMock,
+        },
+        {
+          provide: BcryptProtocol,
+          useValue: bcryptMock,
+        },
+        {
+          provide: JwtProtocol,
+          useValue: jsonWebTokenMock,
+        },
+      ],
+    }).compile();
+
+    // sut = new SignInUsecase(authRepositoryMock, bcryptMock, jsonWebTokenMock);
+    sut = module.get(SignInUsecase);
   });
 
   test('should return jwt valid when send email and password valid', async () => {

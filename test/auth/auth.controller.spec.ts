@@ -1,11 +1,14 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from './auth.controller';
-import { RegisterAuthProtocol, SignInProtocol } from './protocols/usecases';
+import { UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { TestingModule, Test } from '@nestjs/testing';
 import { MockProxy, mock } from 'jest-mock-extended';
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { UpdatePasswordUseCaseProtocol } from './protocols/usecases/update-password';
-import { JwtProtocol } from './protocols/cryptography';
-import { ApiTokenGuard } from './guards/api-token.guard';
+import { AuthController } from '../../src/auth/auth.controller';
+import { ApiTokenGuard } from '../../src/auth/guards/api-token.guard';
+import { JwtProtocol } from '../../src/auth/protocols/cryptography';
+import {
+  SignInProtocol,
+  RegisterAuthProtocol,
+  UpdatePasswordUseCaseProtocol,
+} from '../../src/auth/protocols/usecases';
 
 describe('AuthController', () => {
   let authController: AuthController;
