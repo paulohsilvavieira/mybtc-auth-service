@@ -6,6 +6,7 @@ import {
   AuthRepoProtocol,
   UpdatePasswordRepoInput,
   UpdatePasswordRepoOutput,
+  SaveTokenRecoverPassword,
 } from '../protocols/repository';
 import { AuthenticationEntity } from '../../database/entities';
 import { Injectable, Logger } from '@nestjs/common';
@@ -20,6 +21,21 @@ export class AuthenticationRepository implements AuthRepoProtocol {
     @InjectRepository(AuthenticationEntity)
     private readonly authTypeOrmRepository: Repository<AuthenticationEntity>,
   ) {}
+  async saveTokenRecoverPassword(
+    params: SaveTokenRecoverPassword,
+  ): Promise<{ success: boolean }> {
+    const auth = await this.authTypeOrmRepository.update(
+      {
+        email: params.email,
+      },
+      {
+        token_recover_password: params.token,
+      },
+    );
+    return {
+      success: auth.affected > 0,
+    };
+  }
   async findById(authorizationId: string): Promise<{ password: string }> {
     const auth = await this.authTypeOrmRepository.findOneBy({
       id: authorizationId,

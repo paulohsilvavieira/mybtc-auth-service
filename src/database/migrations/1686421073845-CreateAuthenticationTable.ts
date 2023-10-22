@@ -25,6 +25,16 @@ export class CreateAuthenticationTable1686419096797
             isNullable: false,
           },
           {
+            name: 'token_recover_password',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
+            name: 'expiration_time_token',
+            type: 'varchar',
+            isNullable: true,
+          },
+          {
             name: 'last_access_at',
             type: 'timestamp',
             isNullable: true,

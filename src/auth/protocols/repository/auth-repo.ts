@@ -1,3 +1,8 @@
+import {
+  ResetPasswordUseCaseInput,
+  ResetPasswordUseCaseOutput,
+} from '../usecases/reset-password';
+
 export abstract class AuthRepoProtocol {
   verifyAuthByEmail: (
     params: VerifyAuthRepoInput,
@@ -15,6 +20,10 @@ export abstract class AuthRepoProtocol {
   saveTokenRecoverPassword: (
     params: SaveTokenRecoverPassword,
   ) => Promise<{ success: boolean }>;
+
+  resetPassswordWithToken: (
+    parans: ResetPasswordUseCaseInput,
+  ) => Promise<ResetPasswordUseCaseOutput>;
 }
 
 export type VerifyAuthRepoInput = {
@@ -24,6 +33,7 @@ export type VerifyAuthRepoInput = {
 export type SaveTokenRecoverPassword = {
   token: string;
   email: string;
+  expirationTokenTime: number;
 };
 export type VerifyAuthRepoOutput = {
   isValidEmail: boolean;

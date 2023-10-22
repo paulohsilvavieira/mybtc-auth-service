@@ -20,6 +20,16 @@ export class AuthenticationEntity {
   @Column({ nullable: false })
   password: string;
 
+  @Column({
+    nullable: true,
+  })
+  token_recover_password?: string;
+
+  @Column({
+    nullable: true,
+  })
+  expirationTokenTime?: number;
+
   @Column({ nullable: true })
   last_access_at?: Date;
 
