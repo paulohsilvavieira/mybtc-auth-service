@@ -19,7 +19,7 @@
     "test:cov": "npm test -- --coverage",
     "test:debug": "node --inspect-brk=0.0.0.0:9330 -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "npm test -- --config ./test/jest-e2e.json",
-    "prepare": "husky install",
+    "prepare": "npx husky install",
     "test:staged": "npm test -- --findRelatedTests --passWithNoTests",
     "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "migration:create": "npm run typeorm:cli -- migration:create ./src/database/migrations/$npm_config_name",
@@ -84,17 +84,14 @@
       "json",
       "ts"
     ],
-    "rootDir": "test",
+    "roots":[
+      "<rootDir>/test"
+    ],
     "testRegex": [
       ".*\\.spec\\.ts$"
     ],
     "transform": {
-      "^.+\\.(t|j)s$": [
-        "ts-jest",
-        {
-          "isolatedModules": true
-        }
-      ]
+      "^.+\\.(t|j)s$": "ts-jest"
     },
     "coverageThreshold": {
       "global": {
@@ -102,6 +99,7 @@
       }
     },
     "collectCoverageFrom": [
+      "<rootDir>/src/",
       "**/*.(t|j)s",
       "!**/protocols/**",
       "!**/*.module.(t|j)s",
@@ -109,9 +107,11 @@
       "!**/entities/**",
       "!**/main.ts",
       "!**/index.ts",
-      "!**/*.config.ts"
+      "!**/*.config.ts",
+      "!**/test/utils/mocks/**.(t|j)s",
+      "!**/*.e2e-spec.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "<rootDir>/coverage",
     "testEnvironment": "node"
   }
 }

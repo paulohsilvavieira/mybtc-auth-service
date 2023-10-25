@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-my-bitcoin
+  name: api-auth-service-mybtc
 spec:
   selector:
     matchLabels:
-      app: api-my-bitcoin
+      app: api-auth-service-mybtc
   template:
     metadata:
       labels:
-        app: api-my-bitcoin
+        app: api-auth-service-mybtc
     spec:
       containers:
-        - name: api-my-bitcoin
-          image: paulohsv/api-mybtc:1.1
+        - name: api-auth-service-mybtc
+          image: paulohsv/api-auth-service-mybtc:1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000

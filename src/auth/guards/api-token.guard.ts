@@ -9,10 +9,7 @@ import { JwtProtocol } from '../protocols/cryptography/jwt';
 
 @Injectable()
 export class ApiTokenGuard implements CanActivate {
-  constructor(
-    @Inject(JwtProtocol)
-    private readonly jwt: JwtProtocol,
-  ) {}
+  constructor(private readonly jwt: JwtProtocol) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
     const authToken = request.get('Authorization').split(' ')[1];

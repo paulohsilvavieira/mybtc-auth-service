@@ -12,6 +12,10 @@ import { AuthenticationEntity } from '../../database/entities';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import {
+  ResetPasswordUseCaseInput,
+  ResetPasswordUseCaseOutput,
+} from '../protocols/usecases';
 
 @Injectable()
 export class AuthenticationRepository implements AuthRepoProtocol {
@@ -21,6 +25,9 @@ export class AuthenticationRepository implements AuthRepoProtocol {
     @InjectRepository(AuthenticationEntity)
     private readonly authTypeOrmRepository: Repository<AuthenticationEntity>,
   ) {}
+  resetPassswordWithToken: (
+    parans: ResetPasswordUseCaseInput,
+  ) => Promise<ResetPasswordUseCaseOutput>;
   async saveTokenRecoverPassword(
     params: SaveTokenRecoverPassword,
   ): Promise<{ success: boolean }> {

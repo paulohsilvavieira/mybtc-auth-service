@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { makeFakeDb } from './utils/mocks';
-import { DataSource, Db } from 'typeorm';
+import { makeFakeDb } from '../utils/mocks';
+import { DataSource } from 'typeorm';
 import { IBackup } from 'pg-mem';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from '../src/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { AuthenticationEntity, UserEntity } from '../src/database/entities';
-import { createNestLogger } from '../src/config/logger.config';
-import { getToken } from './utils/mocks/requestToken';
+import { AuthenticationEntity } from '../../src/database/entities';
+import { createNestLogger } from '../../src/config/logger.config';
+import { getToken } from '../utils/mocks/requestToken';
+import { AuthModule } from '../../src/auth/auth.module';
 
 describe('Auth Module (e2e)', () => {
   let app: INestApplication;
@@ -30,7 +30,7 @@ describe('Auth Module (e2e)', () => {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
-        TypeOrmModule.forFeature([AuthenticationEntity, UserEntity]),
+        TypeOrmModule.forFeature([AuthenticationEntity]),
       ],
     })
       .overrideProvider(DataSource)
@@ -75,6 +75,8 @@ describe('Auth Module (e2e)', () => {
           email: 'email5@email.com',
           password: expect.any(String),
           last_access_at: null,
+          token_recover_password: null,
+          expirationTokenTime: null,
           otp_active: null,
           created_at: expect.any(Date),
           updated_at: expect.any(Date),
