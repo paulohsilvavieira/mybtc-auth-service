@@ -7,9 +7,7 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const logger = createNestLogger();
 
-  const app = await NestFactory.create(AppModule, { logger }).then(
-    configureTracing,
-  );
+  const app = await NestFactory.create(AppModule).then(configureTracing);
   const config = app.get(ConfigService);
   const port = config.get('PORT', '3000');
   await app.listen(port);

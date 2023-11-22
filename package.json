@@ -28,6 +28,7 @@
     "entity:create": "npm run typeorm:cli -- entity:create src/database/entities/$npm_config_name && node typeorm-cli.js $npm_config_name"
   },
   "dependencies": {
+    "@golevelup/nestjs-rabbitmq": "^4.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.2",
     "@nestjs/core": "^9.0.0",
@@ -84,7 +85,7 @@
       "json",
       "ts"
     ],
-    "roots":[
+    "roots": [
       "<rootDir>/test"
     ],
     "testRegex": [

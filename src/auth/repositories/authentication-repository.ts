@@ -72,10 +72,6 @@ export class AuthenticationRepository implements AuthRepoProtocol {
     };
   }
   async createAuth(params: CreateAuthRepoInput): Promise<CreateAuthRepoOutput> {
-    this.logger.log({
-      message: 'Start process to save Authentication info on Database',
-    });
-
     const entityToSave = this.authTypeOrmRepository.create({
       email: params.email,
       password: params.password,

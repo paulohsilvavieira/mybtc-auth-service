@@ -35,7 +35,7 @@ services:
       - /usr/src/app/node_modules
     ports:
       - 9330:9330
-      - 3000:3000
+      - 3332:3000
     environment:
       - REDIS=api_redis_my_bitcoin
       - NODE_ENV=development

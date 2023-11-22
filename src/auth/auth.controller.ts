@@ -14,6 +14,8 @@ import {
   RegisterAuthProtocol,
   SignInUsecaseInput,
   RegisterAuthUsecaseInput,
+  SendTokenRecoverPasswordInput,
+  SendTokenRecoverPasswordProtocol,
 } from './protocols/usecases';
 import {
   UpdatePasswordUseCaseInput,
@@ -29,6 +31,7 @@ export class AuthController {
     private readonly singInUsecase: SignInProtocol,
     private readonly registerAuthUsecase: RegisterAuthProtocol,
     private readonly updatePasswordUsecase: UpdatePasswordUseCaseProtocol,
+    private readonly recoverPasswordUsecase: SendTokenRecoverPasswordProtocol,
   ) {}
   @Post('/login')
   @HttpCode(200)
@@ -71,6 +74,18 @@ export class AuthController {
 
     return {
       msg: 'Password updated!',
+    };
+  }
+  @Post('/recover/password')
+  @HttpCode(200)
+  async recoverPassword(@Body() body: SendTokenRecoverPasswordInput) {
+    const result = await this.recoverPasswordUsecase.exec(body);
+    if (!result.success) {
+      throw new BadRequestException('Error on Update password');
+    }
+
+    return {
+      msg: 'Email Password Sended!',
     };
   }
 }

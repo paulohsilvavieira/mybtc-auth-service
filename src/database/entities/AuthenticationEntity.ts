@@ -28,7 +28,7 @@ export class AuthenticationEntity {
   @Column({
     nullable: true,
   })
-  expirationTokenTime?: number;
+  expiration_time_token?: number;
 
   @Column({ nullable: true })
   last_access_at?: Date;

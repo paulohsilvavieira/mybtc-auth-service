@@ -11,7 +11,6 @@ import {
 export class UpdatePasswordUseCase implements UpdatePasswordUseCaseProtocol {
   constructor(
     private readonly authRepository: AuthRepoProtocol,
-
     private readonly bcrypt: BcryptProtocol,
   ) {}
 

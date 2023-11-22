@@ -33,7 +33,7 @@ export type VerifyAuthRepoInput = {
 export type SaveTokenRecoverPassword = {
   token: string;
   email: string;
-  expirationTokenTime: number;
+  expiration_time_token: number;
 };
 export type VerifyAuthRepoOutput = {
   isValidEmail: boolean;

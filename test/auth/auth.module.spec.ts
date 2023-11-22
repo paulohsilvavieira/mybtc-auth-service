@@ -76,7 +76,7 @@ describe('Auth Module (e2e)', () => {
           password: expect.any(String),
           last_access_at: null,
           token_recover_password: null,
-          expirationTokenTime: null,
+          expiration_time_token: null,
           otp_active: null,
           created_at: expect.any(Date),
           updated_at: expect.any(Date),
