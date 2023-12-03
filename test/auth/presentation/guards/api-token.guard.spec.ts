@@ -1,5 +1,5 @@
-import { JwtProtocol } from '../../../src/auth/protocols/cryptography/jwt';
-import { ApiTokenGuard } from '../../../src/auth/guards/api-token.guard';
+import { JwtProtocol } from '@/auth/core/domain/protocols/cryptography/jwt';
+import { ApiTokenGuard } from '@/auth/presentation/guards/api-token.guard';
 import { mock, MockProxy } from 'jest-mock-extended';
 import { TestingModule, Test } from '@nestjs/testing';
 import { ExecutionContext } from '@nestjs/common';

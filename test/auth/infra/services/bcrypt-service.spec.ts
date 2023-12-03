@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { BcryptService } from '../../../src/auth/services/bcrypt-service';
+import { BcryptService } from '@/auth/infra/services/bcrypt-service';
 import { Test, TestingModule } from '@nestjs/testing';
 
 jest.mock('bcrypt');

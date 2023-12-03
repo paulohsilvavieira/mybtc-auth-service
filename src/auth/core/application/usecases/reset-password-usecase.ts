@@ -1,15 +1,17 @@
+import { Injectable } from '@nestjs/common';
 import { TokenRecoverPasswordInvalidException } from '../../domain/exceptions/recover-password-exception';
-import { JwtProtocol } from '../../domain/protocols/cryptography';
+import { Bcrypt } from '../../domain/protocols/cryptography';
 import { AuthRepoProtocol } from '../../domain/protocols/repository';
 import {
   ResetPasswordProtocol,
   ResetPasswordUseCaseInput,
 } from '../../domain/protocols/usecases';
 
+@Injectable()
 export class ResetPasswordUseCase implements ResetPasswordProtocol {
   constructor(
     private readonly authRepository: AuthRepoProtocol,
-    private readonly jwtService: JwtProtocol,
+    private readonly bcryptService: Bcrypt,
   ) {}
   async execute(
     params: ResetPasswordUseCaseInput,
@@ -24,8 +26,10 @@ export class ResetPasswordUseCase implements ResetPasswordProtocol {
     if (!isValidtokenRecoverPassword)
       throw new TokenRecoverPasswordInvalidException();
 
+    const { hashText } = await this.bcryptService.encrypt(params.newPassword);
+
     await this.authRepository.updatePasswordAuth({
-      password: params.newPassword,
+      password: hashText,
       email: params.email,
     });
 
@@ -44,8 +48,9 @@ export class ResetPasswordUseCase implements ResetPasswordProtocol {
       await this.authRepository.getExpirationTimeTokenResetPassword(
         params.email,
       );
-    const token = await this.jwtService.verifyToken(
+    const token = await this.bcryptService.verifyHash(
       params.tokenRecoverPassword,
+      expirationTimeToken.toString(),
     );
     if (token.isValid || expirationTimeToken > Date.now()) return true;
 

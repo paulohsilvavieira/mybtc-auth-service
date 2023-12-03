@@ -1,5 +1,9 @@
-export const getToken = async (app: any): Promise<string> => {
-  await app.post('/auth/register').send({
+import * as request from 'supertest';
+
+export async function getAuthToken(
+  app: request.SuperTest<request.Test>,
+): Promise<string> {
+  app.post('/auth/register').send({
     email: 'email@mail.com',
     password: '12345678',
   });
@@ -7,5 +11,6 @@ export const getToken = async (app: any): Promise<string> => {
     email: 'email@mail.com',
     password: '12345678',
   });
+
   return response.body.token;
-};
+}

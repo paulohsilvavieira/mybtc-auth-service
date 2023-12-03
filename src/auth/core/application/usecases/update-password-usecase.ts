@@ -1,21 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { BcryptProtocol } from '../../domain/protocols/cryptography';
-import { AuthRepoProtocol } from '../../domain/protocols/repository';
+import { Bcrypt } from '@/auth/core/domain/protocols/cryptography';
+import { AuthRepoProtocol } from '@/auth/core/domain/protocols/repository';
 import {
   UpdatePasswordInput,
   UpdatePasswordProtocol,
-} from '../../domain/protocols/usecases/update-password';
-import { AuthenticationParams } from '../../domain/entities/auth-info';
-import {
-  AuthenticationOldPasswordException,
-  AuthenticationParamsInvalidException,
-} from '../../domain/exceptions';
+} from '@/auth/core/domain/protocols/usecases/update-password';
+import { AuthenticationOldPasswordException } from '@/auth/core/domain/exceptions';
 
 @Injectable()
 export class UpdatePasswordUseCase implements UpdatePasswordProtocol {
   constructor(
     private readonly authRepository: AuthRepoProtocol,
-    private readonly bcryptService: BcryptProtocol,
+    private readonly bcryptService: Bcrypt,
   ) {}
 
   async execute(params: UpdatePasswordInput): Promise<{ message: string }> {

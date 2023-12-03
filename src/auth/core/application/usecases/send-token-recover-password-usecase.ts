@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { JwtProtocol } from '../../domain/protocols/cryptography';
+import { Bcrypt, JwtProtocol } from '@/auth/core/domain/protocols/cryptography';
 import {
   AuthRepoProtocol,
   SaveTokenRecoverPasswordInput,
-} from '../../domain/protocols/repository';
+} from '@/auth/core/domain/protocols/repository';
 
-import { PublishMessage } from '../../domain/protocols/message-broker/publish-message';
+import { PublishMessage } from '@/auth/core/domain/protocols/message-broker/publish-message';
 import { ConfigService } from '@nestjs/config';
-import { SendTokenRecoverPasswordProtocol } from '../../domain/protocols/usecases';
+import { SendTokenRecoverPasswordProtocol } from '@/auth/core/domain/protocols/usecases';
 @Injectable()
 export class SendTokenRecoverPasswordUsecase
   implements SendTokenRecoverPasswordProtocol
@@ -17,22 +17,29 @@ export class SendTokenRecoverPasswordUsecase
 
   constructor(
     private readonly authRepo: AuthRepoProtocol,
-    private readonly generateToken: JwtProtocol,
+    private readonly bcryptService: Bcrypt,
     private readonly messageBroker: PublishMessage,
   ) {}
 
   async execute(email: string): Promise<{ message: string }> {
-    const { token: tokenRecoverPassword } =
-      await this.generateToken.createToken({
-        email,
-      });
+    const expirationTimeToken = Date.now() + 300000;
+    const { hashText: tokenRecoverPassword } = await this.bcryptService.encrypt(
+      expirationTimeToken.toString(),
+    );
     const recoveryInfo: SaveTokenRecoverPasswordInput = {
       tokenRecoverPassword,
       email,
-      expirationTimeToken: Date.now() + 300000,
+      expirationTimeToken,
     };
 
     await this.authRepo.saveTokenRecoverPassword(recoveryInfo);
+
+    const emailExists = await this.authRepo.verifyExistsEmail(
+      recoveryInfo.email,
+    );
+    if (!emailExists) {
+      throw new Error();
+    }
 
     await this.messageBroker.pub(
       {

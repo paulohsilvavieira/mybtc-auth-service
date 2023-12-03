@@ -1,16 +1,14 @@
 /* eslint-disable prefer-const */
 import { mock, MockProxy } from 'jest-mock-extended';
-import { SignInUsecase } from '../../../src/auth/usecases/signin-usecase';
-import {
-  BcryptProtocol,
-  JwtProtocol,
-} from '../../../src/auth/protocols/cryptography';
-import { AuthRepoProtocol } from '../../../src/auth/protocols/repository';
+import { SignInUsecase } from '@/auth/core/application/usecases/signin-usecase';
+import { Bcrypt, JwtProtocol } from '@/auth/core/domain/protocols/cryptography';
+import { AuthRepoProtocol } from '@/auth/core/domain/protocols/repository';
 import { Test, TestingModule } from '@nestjs/testing';
+import { AuthenticationParamsInvalidException } from '@/auth/core/domain/exceptions';
 
 describe('SignIn Usecase', () => {
   let authRepositoryMock: MockProxy<AuthRepoProtocol>;
-  let bcryptMock: MockProxy<BcryptProtocol>;
+  let bcryptMock: MockProxy<Bcrypt>;
   let jsonWebTokenMock: MockProxy<JwtProtocol>;
 
   let sut: SignInUsecase;
@@ -18,10 +16,11 @@ describe('SignIn Usecase', () => {
     authRepositoryMock = mock();
     bcryptMock = mock();
     jsonWebTokenMock = mock();
-    authRepositoryMock.verifyAuthByEmail.mockResolvedValue({
-      isValidEmail: true,
+    authRepositoryMock.getPasswordToCompre.mockResolvedValue({
       password: 'any_password',
-      authorizationId: '12345',
+    });
+    authRepositoryMock.getAuthorizationIdWithEmail.mockResolvedValue({
+      authorizationId: 'any_id',
     });
     bcryptMock.verifyHash.mockResolvedValue({
       isValid: true,
@@ -40,7 +39,7 @@ describe('SignIn Usecase', () => {
           useValue: authRepositoryMock,
         },
         {
-          provide: BcryptProtocol,
+          provide: Bcrypt,
           useValue: bcryptMock,
         },
         {
@@ -50,44 +49,35 @@ describe('SignIn Usecase', () => {
       ],
     }).compile();
 
-    // sut = new SignInUsecase(authRepositoryMock, bcryptMock, jsonWebTokenMock);
     sut = module.get(SignInUsecase);
+  });
+  it('should be defined', () => {
+    expect(sut).toBeDefined();
   });
 
   test('should return jwt valid when send email and password valid', async () => {
-    const { token } = await sut.exec({
+    const { token } = await sut.execute({
       email: 'valid@email.com',
       password: '12345678',
     });
     expect(token).toEqual('validToken');
   });
+
   test('should return undefined token when dont send valid email credential', async () => {
-    authRepositoryMock.verifyAuthByEmail.mockResolvedValueOnce({
-      isValidEmail: false,
+    authRepositoryMock.getPasswordToCompre.mockResolvedValueOnce({
       password: undefined,
-      authorizationId: undefined,
+    });
+    bcryptMock.verifyHash.mockResolvedValue({
+      isValid: false,
     });
 
-    const { token } = await sut.exec({
-      email: 'wrongemail@email.com',
-      password: 'wrongpassword',
-    });
-    expect(token).toBeUndefined();
-  });
-
-  test('should return undefined token when dont send valid password credential', async () => {
-    authRepositoryMock.verifyAuthByEmail.mockResolvedValueOnce({
-      isValidEmail: true,
-      password: '123456',
-      authorizationId: '12345',
-    });
-
-    bcryptMock.verifyHash.mockResolvedValue({ isValid: false });
-
-    const { token } = await sut.exec({
-      email: 'valid@email.com',
-      password: 'wrongpassword',
-    });
-    expect(token).toBeUndefined();
+    try {
+      await sut.execute({
+        email: 'wrongemail@email.com',
+        password: 'wrongpassword',
+      });
+    } catch (error) {
+      expect(error).toEqual(new AuthenticationParamsInvalidException());
+    }
   });
 });

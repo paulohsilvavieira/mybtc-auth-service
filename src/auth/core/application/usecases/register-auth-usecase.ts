@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RegisterAuthProtocol } from '@/auth/core/domain/protocols/usecases';
-import { BcryptProtocol } from '@/auth/core/domain/protocols/cryptography';
+import { Bcrypt } from '@/auth/core/domain/protocols/cryptography';
 import { AuthRepoProtocol } from '@/auth/core/domain/protocols/repository';
 import { AuthenticationParams } from '../../domain/entities/auth-info';
 
@@ -8,7 +8,7 @@ import { AuthenticationParams } from '../../domain/entities/auth-info';
 export class RegisterAuthUsecase implements RegisterAuthProtocol {
   constructor(
     private readonly authRepository: AuthRepoProtocol,
-    private readonly bcryptService: BcryptProtocol,
+    private readonly bcryptService: Bcrypt,
   ) {}
   async execute(params: AuthenticationParams): Promise<{ message: string }> {
     const { hashText: hashedPassword } = await this.bcryptService.encrypt(

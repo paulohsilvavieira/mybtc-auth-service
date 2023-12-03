@@ -1,18 +1,19 @@
 import { mock, MockProxy } from 'jest-mock-extended';
-import { BcryptProtocol } from '../../../src/auth/protocols/cryptography';
-import { AuthRepoProtocol } from '../../../src/auth/protocols/repository/auth-repo';
-import { UpdatePasswordUseCase } from '../../../src/auth/usecases/update-password-usecase';
+import { Bcrypt } from '@/auth/core/domain/protocols/cryptography';
+import { AuthRepoProtocol } from '@/auth/core/domain/protocols/repository/auth-repo';
+import { UpdatePasswordUseCase } from '@/auth/core/application/usecases/update-password-usecase';
 import { Test, TestingModule } from '@nestjs/testing';
+import { AuthenticationOldPasswordException } from '@/auth/core/domain/exceptions';
 describe('Update passsword', () => {
   let sut: UpdatePasswordUseCase;
   let authRepo: MockProxy<AuthRepoProtocol>;
-  let bcryptMock: MockProxy<BcryptProtocol>;
+  let bcryptMock: MockProxy<Bcrypt>;
   beforeAll(() => {
     authRepo = mock();
     bcryptMock = mock();
-    authRepo.findById.mockResolvedValue({ password: 'digest' });
+    authRepo.getPasswordToCompre.mockResolvedValue({ password: 'digest' });
 
-    authRepo.updatePassword.mockResolvedValue({ success: true });
+    authRepo.updatePasswordAuth.mockResolvedValue();
     bcryptMock.encrypt.mockResolvedValue({
       hashText: 'digest_string',
     });
@@ -29,7 +30,7 @@ describe('Update passsword', () => {
           useValue: authRepo,
         },
         {
-          provide: BcryptProtocol,
+          provide: Bcrypt,
           useValue: bcryptMock,
         },
       ],
@@ -38,22 +39,27 @@ describe('Update passsword', () => {
     sut = module.get(UpdatePasswordUseCase);
   });
   test('should return true if process update passsword works', async () => {
-    const result = await sut.exec({
+    const result = await sut.execute({
       oldPassword: 'old_password',
       newPassword: 'new_password',
-      authorizationId: 'authId',
+      email: 'email@email.com',
     });
-    expect(result.success).toEqual(true);
+    expect(result).toEqual({
+      message: 'Password Updated',
+    });
   });
   test('should return false if old password is incorrect', async () => {
     bcryptMock.verifyHash.mockResolvedValueOnce({
       isValid: false,
     });
-    const result = await sut.exec({
-      oldPassword: 'old_wrong_password',
-      newPassword: 'new_password',
-      authorizationId: 'authId',
-    });
-    expect(result.success).toEqual(false);
+    try {
+      await sut.execute({
+        oldPassword: 'old_wrong_password',
+        newPassword: 'new_password',
+        email: 'email@email.com',
+      });
+    } catch (error) {
+      expect(error).toEqual(new AuthenticationOldPasswordException());
+    }
   });
 });

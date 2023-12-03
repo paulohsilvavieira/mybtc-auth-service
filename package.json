@@ -1,12 +1,12 @@
 {
-  "name": "api-my-bitcoin",
+  "name": "mybtc-auth-service",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "docker": "docker-compose up -d api_my_bitcoin_dev --no-recreate && docker exec -it api_my_bitcoin_dev /bin/sh",
+    "docker": "docker compose up -d api_my_bitcoin_dev --no-recreate && docker exec -it api_my_bitcoin_dev /bin/sh",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -19,13 +19,15 @@
     "test:cov": "npm test -- --coverage",
     "test:debug": "node --inspect-brk=0.0.0.0:9330 -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "npm test -- --config ./test/jest-e2e.json",
+    "test:prepare": "docker compose up -d mybtc_auth_service_rabbitmq --no-recreate",
+
     "prepare": "npx husky install",
     "test:staged": "npm test -- --findRelatedTests --passWithNoTests",
     "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
-    "migration:create": "npm run typeorm:cli -- migration:create ./src/database/migrations/$npm_config_name",
+    "migration:create": "npm run typeorm:cli -- migration:create ./src/$npm_config_module/infra/database/migrations/$npm_config_name",
     "migration:run": "npm run typeorm:cli -- migration:run -d ./typeorm-config.ts",
     "migration:revert": "npm run typeorm:cli -- migration:revert -d ./typeorm-config.ts",
-    "entity:create": "npm run typeorm:cli -- entity:create src/database/entities/$npm_config_name && node typeorm-cli.js $npm_config_name"
+    "entity:create": "npm run typeorm:cli -- entity:create ./src/$npm_config_module/infra/database/entities/$npm_config_name && node typeorm-cli.js --module=$npm_config_module --name=$npm_config_name"
   },
   "dependencies": {
     "@golevelup/nestjs-rabbitmq": "^4.0.0",
@@ -38,6 +40,8 @@
     "aws-lambda": "^1.0.7",
     "aws-serverless-express": "^3.4.0",
     "bcrypt": "^5.1.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "nest-winston": "^1.9.3",
     "pg": "^8.11.0",
     "reflect-metadata": "^0.1.13",
@@ -113,6 +117,10 @@
       "!**/*.e2e-spec.(t|j)s"
     ],
     "coverageDirectory": "<rootDir>/coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "@/test/(.*)": "<rootDir>/test/$1",
+      "@/(.*)": "<rootDir>/src/$1"
+    }
   }
 }

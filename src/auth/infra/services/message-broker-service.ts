@@ -1,6 +1,5 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import {
   MessageConfig,
   PublishMessage,
@@ -10,7 +9,7 @@ import {
 export class MessageBrokerService implements PublishMessage {
   constructor(private readonly amqpConnection: AmqpConnection) {}
   async pub(message: any, config: MessageConfig): Promise<void> {
-    this.amqpConnection.publish(
+    await this.amqpConnection.publish(
       config.exchangeName,
       config.routingKey,
       message,

@@ -1,19 +1,13 @@
 import { AuthenticationError } from '@/exeptions';
 
-export class BearerTokenInvalidException extends AuthenticationError {
-  constructor() {
-    super('[MYBTC][AUTH][0001]', 'Invalid bearer token!');
-  }
-}
-
 export class AuthenticationParamsInvalidException extends AuthenticationError {
   constructor() {
-    super('[MYBTC][AUTH][0002]', 'Unauthorized');
+    super('[MYBTC][AUTH][0001]', 'Invalid email or password');
   }
 }
 
 export class AuthenticationOldPasswordException extends AuthenticationError {
   constructor() {
-    super('[MYBTC][AUTH][0003]', 'Invalid old password!');
+    super('[MYBTC][AUTH][0002]', 'Invalid old password!');
   }
 }

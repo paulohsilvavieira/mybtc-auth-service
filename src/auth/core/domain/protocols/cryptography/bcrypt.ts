@@ -1,4 +1,4 @@
-export abstract class BcryptProtocol {
+export abstract class Bcrypt {
   encrypt: (plainText: string) => Promise<{ hashText: string }>;
 
   verifyHash: (

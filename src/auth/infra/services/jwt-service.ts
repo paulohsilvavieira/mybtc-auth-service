@@ -1,6 +1,6 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JwtProtocol } from '../../core/domain/protocols/cryptography';
+import { JwtProtocol } from '@/auth/core/domain/protocols/cryptography';
 
 @Injectable()
 export class JsonWebTokenService implements JwtProtocol {
@@ -10,6 +10,7 @@ export class JsonWebTokenService implements JwtProtocol {
     const token = await this.jwtService.signAsync(payload);
     return { token };
   }
+
   async verifyToken(
     token: string,
   ): Promise<{ isValid: boolean; payload: any }> {

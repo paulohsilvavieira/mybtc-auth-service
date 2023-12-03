@@ -1,5 +1,4 @@
 import { AuthenticationParams } from '../../entities/auth-info';
-import { ResetPasswordUseCaseInput } from '../usecases';
 
 export abstract class AuthRepoProtocol {
   getPasswordToCompre: (email: string) => Promise<{ password: string }>;
@@ -21,6 +20,8 @@ export abstract class AuthRepoProtocol {
   }>;
 
   invalidTokenExpiration: (email: string) => Promise<void>;
+
+  verifyExistsEmail: (email: string) => Promise<boolean>;
 }
 
 export type VerifyAuthRepoInput = {

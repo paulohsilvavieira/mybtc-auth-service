@@ -6,10 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthenticationEntity } from './database/entities';
-import {
-  BcryptProtocol,
-  JwtProtocol,
-} from '../core/domain/protocols/cryptography';
+import { Bcrypt, JwtProtocol } from '../core/domain/protocols/cryptography';
 import { PublishMessage } from '../core/domain/protocols/message-broker/publish-message';
 import { BcryptService } from './services/bcrypt-service';
 import { JsonWebTokenService } from './services/jwt-service';
@@ -22,9 +19,13 @@ const useFactoryForRabbitMQ = (configService: ConfigService) => {
         name: configService.get('EXCHANGE_NAME_MAILER_SERVICE'),
         type: 'direct',
       },
+      {
+        name: configService.get('EXCHANGE_NAME_MAILER_SERVICE') + '.dead',
+        type: 'direct',
+      },
     ],
 
-    uri: configService.get('AMQP_URI_CONNECTION'),
+    uri: configService.get('AMQP_URI_CONNECTION').toString(),
     connectionInitOptions: { wait: true },
   };
   return rabbitConfig;
@@ -76,7 +77,7 @@ const useFactoryForRabbitMQ = (configService: ConfigService) => {
     },
 
     {
-      provide: BcryptProtocol,
+      provide: Bcrypt,
       useFactory: () => new BcryptService(10),
     },
     {
@@ -84,6 +85,6 @@ const useFactoryForRabbitMQ = (configService: ConfigService) => {
       useClass: JsonWebTokenService,
     },
   ],
-  exports: [BcryptProtocol, PublishMessage, AuthRepoProtocol, JwtProtocol],
+  exports: [Bcrypt, PublishMessage, AuthRepoProtocol, JwtProtocol],
 })
 export class InfraModule {}
