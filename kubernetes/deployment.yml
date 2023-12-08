@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-auth-service-mybtc
+  name: mybtc-auth-service
 spec:
   selector:
     matchLabels:
-      app: api-auth-service-mybtc
+      app: mybtc-auth-service
   template:
     metadata:
       labels:
-        app: api-auth-service-mybtc
+        app: mybtc-auth-service
     spec:
       containers:
-        - name: api-auth-service-mybtc
-          image: paulohsv/api-auth-service-mybtc:1.0
+        - name: mybtc-auth-service
+          image: paulohsv/mybtc-auth-service:1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000

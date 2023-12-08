@@ -4,7 +4,6 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { TypeORMError } from 'typeorm';
 import {
   ResponseError,
   DomainError,
@@ -14,13 +13,6 @@ import {
 
 export class HttpExceptionMapper {
   static catch(error: any): HttpException {
-    if (error instanceof BadRequestException) {
-      return error;
-    }
-    if (error instanceof TypeORMError) {
-      return new InternalServerErrorException();
-    }
-
     if (error instanceof DomainError) {
       return new BadRequestException(new ResponseError(error));
     }
