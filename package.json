@@ -6,7 +6,6 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "docker": "docker compose up -d api_my_bitcoin_dev --no-recreate && docker exec -it api_my_bitcoin_dev /bin/sh",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -20,14 +19,13 @@
     "test:debug": "node --inspect-brk=0.0.0.0:9330 -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "npm test -- --config ./test/jest-e2e.json",
     "test:prepare": "docker compose up -d mybtc_auth_service_rabbitmq --no-recreate",
-
     "prepare": "npx husky install",
     "test:staged": "npm test -- --findRelatedTests --passWithNoTests",
     "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "migration:create": "npm run typeorm:cli -- migration:create ./src/$npm_config_module/infra/database/migrations/$npm_config_name",
-    "migration:run": "npm run typeorm:cli -- migration:run -d ./typeorm-config.ts",
-    "migration:revert": "npm run typeorm:cli -- migration:revert -d ./typeorm-config.ts",
-    "entity:create": "npm run typeorm:cli -- entity:create ./src/$npm_config_module/infra/database/entities/$npm_config_name && node typeorm-cli.js --module=$npm_config_module --name=$npm_config_name"
+    "migration:run": "npm run typeorm:cli -- migration:run -d ./src/datasource-typeorm.ts",
+    "migration:revert": "npm run typeorm:cli -- migration:revert -d ./src/datasource-typeorm.ts",
+    "entity:create": "npm run typeorm:cli -- entity:create ./src/$npm_config_module/infra/database/entities/$npm_config_name && node src/update-index.js --module=$npm_config_module --name=$npm_config_name"
   },
   "dependencies": {
     "@golevelup/nestjs-rabbitmq": "^4.0.0",
