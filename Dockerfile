@@ -1,4 +1,4 @@
-FROM node:18.16-alpine as build
+FROM node:20.9-alpine as build
 
 # Create a working directory inside the container
 WORKDIR /app
@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy the rest of the application files to the working directory
 COPY . .
@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM node:18.16-alpine
+FROM node:20.9-alpine
 
 # Create a working directory inside the container
 WORKDIR /app
@@ -25,7 +25,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm install --production
+RUN npm install --production --legacy-peer-deps
 
 # Copy the application from the build stage
 COPY --from=build /app/dist .
