@@ -3,7 +3,6 @@ import { Repository } from 'typeorm';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AuthenticationEntity } from '@/auth/infra/database/entities';
-import { exec } from 'child_process';
 
 describe('AuthenticationRepository', () => {
   let sut: AuthenticationRepository;

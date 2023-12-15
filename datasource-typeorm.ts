@@ -1,5 +1,6 @@
-import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
+import { DataSource } from 'typeorm';
+
 config();
 
 export default new DataSource({
@@ -9,7 +10,7 @@ export default new DataSource({
   username: process.env.PG_USERNAME,
   password: process.env.PG_PASSWORD,
   database: process.env.PG_DATABASE,
-  migrations: [process.env.TYPEORM_MIGRATION_FOLDER],
+  migrations: [process.env.TYPEORM_MIGRATION_FOLDER as string],
   synchronize: false,
   migrationsRun: false,
 });

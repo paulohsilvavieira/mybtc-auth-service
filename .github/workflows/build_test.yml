@@ -1,11 +1,12 @@
 name: Build and Test
 
 on: push
-
+env:
+  AMQP_URI_CONNECTION: amqp://user:password@127.0.0.1:35672
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js

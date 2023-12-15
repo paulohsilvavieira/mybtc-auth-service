@@ -24,6 +24,7 @@ export class CustomValidationPipe implements PipeTransform<any> {
         errors: this.formatErrors(errors),
       });
     }
+    return value;
   }
 
   private toValidate(metatype: Function): boolean {

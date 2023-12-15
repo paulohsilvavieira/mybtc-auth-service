@@ -20,7 +20,9 @@ export class HttpExceptionMapper {
     if (error instanceof AuthenticationError) {
       return new UnauthorizedException(new ResponseError(error));
     }
-
+    if (error instanceof BadRequestException) {
+      return error;
+    }
     return new InternalServerErrorException(
       new ResponseError(new InternalServerError()),
     );

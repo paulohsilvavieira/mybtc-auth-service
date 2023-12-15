@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Bcrypt, JwtProtocol } from '@/auth/core/domain/protocols/cryptography';
+import { Bcrypt } from '@/auth/core/domain/protocols/cryptography';
 import {
   AuthRepoProtocol,
   SaveTokenRecoverPasswordInput,

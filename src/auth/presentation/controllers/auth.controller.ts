@@ -6,8 +6,6 @@ import {
   Post,
   Put,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import {
   SignInProtocol,
@@ -18,7 +16,6 @@ import {
 } from '../../core/domain/protocols/usecases';
 
 import { ApiTokenGuard } from '../guards/api-token.guard';
-import { CustomValidationPipe } from '../pipes/custom-validation-pipe';
 import {
   CreateUserDto,
   RecoverPasswordDto,
