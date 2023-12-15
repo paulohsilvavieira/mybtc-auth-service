@@ -1,8 +1,7 @@
 name: Build and Test
 
 on: push
-env:
-  AMQP_URI_CONNECTION: amqp://user:password@127.0.0.1:35672
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,4 +30,6 @@ jobs:
           node-version: '20'
 
       - name: Test and Coverage
-        run: npm run test:docker
+        run: npm run test:prepare && npm run test
+        env:
+          AMQP_URI_CONNECTION: amqp://user:password@127.0.0.1:35672
