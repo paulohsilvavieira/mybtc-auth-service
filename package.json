@@ -81,7 +81,7 @@
     "typescript": "^4.7.4"
   },
   "jest": {
-    "setupFiles": ["<rootDir>/test/.jest/setEnvVars.js"],
+    "setupFiles": ["<rootDir>/test/.jest/setEnvVars.ts"],
     "moduleFileExtensions": [
       "js",
       "json",
