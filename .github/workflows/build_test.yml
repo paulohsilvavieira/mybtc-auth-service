@@ -5,7 +5,14 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+    services:
+      rabbitmq:
+        image: rabbitmq:3.8
+        env:
+          RABBITMQ_DEFAULT_USER: user
+          RABBITMQ_DEFAULT_PASS: password
+        ports:
+          - 5672
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
@@ -44,9 +51,10 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
       - name: Test and Coverage
-        run: npm run test:prepare && npm run test:cov
+        run: npm run test:cov
         env:
-          AMQP_URI_CONNECTION: amqp://user:password@127.0.0.1:35672
+          AMQP_URI_CONNECTION: amqp://user:password@127.0.0.1:5672
           EXCHANGE_NAME_MAILER_SERVICE: my_bitcoin.mailer
           ROUTING_KEY_MAILER_SERVICE: mail.recover_password
