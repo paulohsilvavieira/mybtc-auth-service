@@ -25,7 +25,8 @@
     "migration:create": "npm run typeorm:cli -- migration:create ./src/$npm_config_module/infra/database/migrations/$npm_config_name",
     "migration:run": "npm run typeorm:cli -- migration:run -d ./datasource-typeorm.ts",
     "migration:revert": "npm run typeorm:cli -- migration:revert -d ./datasource-typeorm.ts",
-    "entity:create": "npm run typeorm:cli -- entity:create ./src/$npm_config_module/infra/database/entities/$npm_config_name && node src/update-index.js --module=$npm_config_module --name=$npm_config_name"
+    "entity:create": "npm run typeorm:cli -- entity:create ./src/$npm_config_module/infra/database/entities/$npm_config_name && node src/update-index.js --module=$npm_config_module --name=$npm_config_name",
+    "test:docker":"docker compose up -d api_test && docker compose exec -T api_test  npm run test:cov"
   },
   "dependencies": {
     "@golevelup/nestjs-rabbitmq": "^4.0.0",
