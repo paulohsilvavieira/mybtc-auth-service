@@ -55,8 +55,5 @@ jobs:
 
       - name: Test and Coverage
         run: npm run test:cov
-        env:
-          AMQP_URI_CONNECTION: amqp://user:password@127.0.0.1:5672
-          EXCHANGE_NAME_MAILER_SERVICE: my_bitcoin.mailer
-          ROUTING_KEY_MAILER_SERVICE: mail.recover_password
-          SECRET_JWT: dummy
+       
+         

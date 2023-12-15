@@ -3,7 +3,7 @@ import * as request from 'supertest';
 export async function getAuthToken(
   app: request.SuperTest<request.Test>,
 ): Promise<string> {
-  app.post('/auth/register').send({
+  await app.post('/auth/register').send({
     email: 'email@mail.com',
     password: '12345678',
   });
