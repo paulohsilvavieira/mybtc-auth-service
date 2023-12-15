@@ -1,4 +1,4 @@
-FROM node:20.9-alpine as build
+FROM node:20.10-alpine as build
 
 # Create a working directory inside the container
 WORKDIR /app

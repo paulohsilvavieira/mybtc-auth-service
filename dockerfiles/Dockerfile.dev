@@ -10,10 +10,4 @@ COPY . .
 
 RUN pnpm install
 
-RUN pnpm jest -g
-
 EXPOSE 3000 9330
-
-
-
-
