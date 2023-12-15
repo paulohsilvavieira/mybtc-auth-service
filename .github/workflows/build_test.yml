@@ -38,7 +38,7 @@ jobs:
           RABBITMQ_DEFAULT_USER: user
           RABBITMQ_DEFAULT_PASS: password
         ports:
-          - 5672
+          - 5672:5672
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
