@@ -5,7 +5,7 @@ services:
     container_name: api_test
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile.dev
+      dockerfile: Dockerfile.dev
     tty: true
     stdin_open: true
     environment:
@@ -31,7 +31,7 @@ services:
     container_name: mybtc_auth_service
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile.dev
+      dockerfile: Dockerfile.dev
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
