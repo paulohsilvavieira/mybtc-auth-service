@@ -62,7 +62,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{secrets.DOCKER_USERNAME}}/mybtc-auth-service:${{github.sha}}
+          tags: ${{secrets.DOCKER_USERNAME}}/mybtc-auth-service:latest
   docker-migration:
     name: Push image dev to docker hub
     runs-on: ubuntu-latest
@@ -83,4 +83,4 @@ jobs:
           context: .
           file: Dockerfile.dev
           push: true
-          tags: ${{secrets.DOCKER_USERNAME}}/mybtc-auth-service-dev:${{github.sha}}
+          tags: ${{secrets.DOCKER_USERNAME}}/mybtc-auth-service-dev:latest
