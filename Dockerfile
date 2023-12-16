@@ -24,6 +24,8 @@ COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/package*.json ./
 
 RUN npm ci --legacy-peer-deps --ignore-scripts --omit=dev --silent
+
+RUN npm rebuild bcrypt 
 # Expose the port on which the application will run
 EXPOSE 3000
 

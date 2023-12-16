@@ -46,7 +46,7 @@ services:
       - PG_USERNAME=postgres
       - PG_PASSWORD=admin
       - SECRET_JWT=139b812008b3ab0443d30b92d4f9527854d02141
-      - TYPEORM_MIGRATION_FOLDER='/usr/src/app/src/database/migrations/*.ts'
+      - TYPEORM_MIGRATION_FOLDER='/usr/src/app/src/**/infra/database/migrations/*.ts'
       - LOG_LEVEL=info
       - AMQP_URI_CONNECTION=amqp://user:password@mybtc_auth_service_rabbitmq:5672
       - EXCHANGE_NAME_MAILER_SERVICE=my_bitcoin.mailer
