@@ -2,15 +2,12 @@ name: Build and Test
 
 on: push
 
-env:
- BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
-
 jobs:
   build:
     name: Build code
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code on ${{vars.BRANCH_NAME}}
+      - name: Checkout Code on ${{ github.head_ref || github.ref_name }} 
         uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -34,7 +31,7 @@ jobs:
         ports:
           - 5672:5672
     steps:
-      - name: Checkout Code on ${{vars.BRANCH_NAME}}
+      - name: Checkout Code on ${{ github.head_ref || github.ref_name }} 
         uses: actions/checkout@v4
       - name: Setup NodeJs
         uses: actions/setup-node@v4
@@ -50,7 +47,7 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout Code on ${{vars.BRANCH_NAME}}
+      - name: Checkout Code on ${{ github.head_ref || github.ref_name }} 
         uses: actions/checkout@v4
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -64,4 +61,4 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{secrets.DOCKER_USERNAME}}/my_btc_auth:${{github.sha}}
+          tags: ${{secrets.DOCKER_USERNAME}}/mybtc-auth-service:${{github.sha}}
