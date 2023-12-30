@@ -2,12 +2,14 @@ name: Build and Test
 
 on: push
 
+env:
+  AMQP_URI_CONNECTION: amqp://user:password@127.0.0.1:5672
 jobs:
   build:
     name: Build code
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code on ${{ github.head_ref || github.ref_name }} 
+      - name: Checkout Code on ${{ github.head_ref || github.ref_name }}
         uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -32,7 +34,7 @@ jobs:
         ports:
           - 5672:5672
     steps:
-      - name: Checkout Code on ${{ github.head_ref || github.ref_name }} 
+      - name: Checkout Code on ${{ github.head_ref || github.ref_name }}
         uses: actions/checkout@v4
       - name: Setup NodeJs
         uses: actions/setup-node@v4
@@ -48,14 +50,14 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout Code on ${{ github.head_ref || github.ref_name }} 
+      - name: Checkout Code on ${{ github.head_ref || github.ref_name }}
         uses: actions/checkout@v4
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
+
       - name: Build and push Docker image
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
@@ -69,14 +71,14 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout Code on ${{ github.head_ref || github.ref_name }} 
+      - name: Checkout Code on ${{ github.head_ref || github.ref_name }}
         uses: actions/checkout@v4
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
+
       - name: Build and push Docker image
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:

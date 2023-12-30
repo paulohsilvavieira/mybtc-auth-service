@@ -21,11 +21,11 @@ services:
       - AMQP_URI_CONNECTION=amqp://user:password@mybtc_auth_service_rabbitmq:5672
       - EXCHANGE_NAME_MAILER_SERVICE=my_bitcoin.mailer
       - ROUTING_KEY_MAILER_SERVICE=mail.recover_password
+      - DOCKER=true
     volumes:
       - ./:/app
     working_dir: '/app'
     depends_on:
-      - mybtc_auth_service_db
       - mybtc_auth_service_rabbitmq
   mybtc_auth_service:
     container_name: mybtc_auth_service
@@ -60,7 +60,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: mybtc_auth_service_dev      
+      POSTGRES_DB: mybtc_auth_service_dev
     volumes:
       - ./docker/postgresql/mybtc_auth_service_db:/var/lib/postgresql:z
     ports:
@@ -77,7 +77,7 @@ services:
         - 35672:5672
         - 25672:15672
     environment:
-      - RABBITMQ_DEFAULT_USER=user 
+      - RABBITMQ_DEFAULT_USER=user
       - RABBITMQ_DEFAULT_PASS=password
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq:rw

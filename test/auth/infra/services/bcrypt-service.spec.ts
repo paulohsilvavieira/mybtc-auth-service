@@ -1,12 +1,8 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { BcryptService } from '@/auth/infra/services/bcrypt-service';
 import { Test, TestingModule } from '@nestjs/testing';
 
-jest.mock('bcrypt');
-
-// const makeSut = (): BcryptService => {
-//   return new BcryptService(salt);
-// };
+jest.mock('bcryptjs');
 
 describe('Bcrypt Service', () => {
   const salt = 10;
